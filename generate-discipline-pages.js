@@ -327,6 +327,42 @@ function generatePage(page, matchedProducts, allPages) {
     }
   }
   </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Materiais Pedagógicos BNCC 2026", "item": "${BASE_URL}/" },
+      { "@type": "ListItem", "position": 2, "name": "${page.title.split('|')[0].trim()}" }
+    ]
+  }
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "O que inclui o material de ${page.title.split('|')[0].trim()}?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Inclui planos de aula, atividades e avaliações totalmente alinhados à BNCC 2026. Todos os materiais são 100% editáveis em Word ou PowerPoint."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "O material é atualizado para a BNCC 2026?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Sim! Todo o conteúdo foi desenvolvido e atualizado de acordo com a Base Nacional Comum Curricular (BNCC) 2026, com códigos e habilidades corretos."
+        }
+      }
+    ]
+  }
+  </script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>${cssStyles}</style>
 </head>

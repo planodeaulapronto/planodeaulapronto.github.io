@@ -230,6 +230,43 @@ const html = `<!DOCTYPE html>
           "text": "Os materiais cobrem desde o Berçário até o Ensino Médio, incluindo todas as disciplinas: Português, Matemática, Ciências, História, Geografia, Arte, Educação Física, Inglês, Ensino Religioso, Filosofia, Sociologia, Física, Química e Biologia."
         }
       }
+      }
+    ]
+  }
+  </script>
+
+  <!-- Organization and WebSite Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://planodeaulapronto.github.io/planodeaulapronto/#website",
+        "url": "https://planodeaulapronto.github.io/planodeaulapronto/",
+        "name": "Materiais Pedagógicos BNCC 2026",
+        "description": "Planos de aula, atividades e avaliações alinhadas à BNCC",
+        "potentialAction": [{
+          "@type": "SearchAction",
+          "target": {
+            "@type": "EntryPoint",
+            "urlTemplate": "https://planodeaulapronto.github.io/planodeaulapronto/?search={search_term_string}"
+          },
+          "query-input": "required name=search_term_string"
+        }],
+        "inLanguage": "pt-BR"
+      },
+      {
+        "@type": "Organization",
+        "@id": "https://planodeaulapronto.github.io/planodeaulapronto/#organization",
+        "name": "Diário da Educação",
+        "url": "https://planodeaulapronto.github.io/planodeaulapronto/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "${products[0] ? `https://planodeaulapronto.github.io/planodeaulapronto/${products[0].localImage || 'images/' + products[0].slug + '.webp'}` : ''}"
+        },
+        "description": "Plataforma líder em materiais pedagógicos voltados para professores e instituições de ensino no Brasil, 100% alinhados à BNCC."
+      }
     ]
   }
   </script>

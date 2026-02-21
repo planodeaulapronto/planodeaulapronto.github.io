@@ -114,17 +114,15 @@ variants.forEach((v, idx) => {
     // Replace badge
     html = html.replace(/<div class="hero-badge">.*?<\/div>/, `<div class="hero-badge">${v.badge}</div>`);
 
-    // Replace internal product page links with direct Hotmart links for variant repos
-    // (variant repos don't have products/ directory, so link directly to Hotmart)
+    // Link variants to the canonical product pages instead of skipping them.
     products.forEach(p => {
-      let buyLink = p.hotmartLink || p.link || '';
-      if (buyLink.includes('go.hotmart.com')) {
-        buyLink = buyLink.split('?')[0] + `?src=${v.src}`;
-      }
-      html = html.replace(
-        new RegExp(`href="products/${p.slug}\\.html"`, 'g'),
-        `href="${buyLink}" target="_blank" rel="noopener"`
-      );
+        // Direct relative link to products/slug.html won't work perfectly on GitHub Pages variants because we don't copy the products folder, 
+        // but we can link to the absolute canonical URL where the products/ folder exists (main repo).
+        // This solves the SEO requirement "cada produto deve ter uma pagina unica".
+        html = html.replace(
+            new RegExp(`href="products/${p.slug}\\.html"`, 'g'),
+            `href="https://${USERNAME}.github.io/${REPO}/products/${p.slug}.html"`
+        );
     });
 
     // Also fix image paths: variants are at root level, images are in main repo

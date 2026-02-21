@@ -1,6 +1,6 @@
 User-agent: *
 Allow: /
-Sitemap: https://tonibuch23.github.io/materiais-pedagogicos-bncc-2026/sitemap.xml
+Sitemap: https://planodeaulapronto.github.io/planodeaulapronto/sitemap.xml
 
 # Materiais Pedagogicos BNCC 2026
 # Planos de Aula, Atividades, Avaliacoes e Slides

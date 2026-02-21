@@ -243,32 +243,18 @@ function generatePage(page, matchedProducts, allPages) {
   const productCards = matchedProducts.map(p => {
     const title = p.title.replace(/"/g, '&quot;').replace(/</g, '&lt;');
     const desc = (p.description || '').substring(0, 120).replace(/"/g, '&quot;').replace(/</g, '&lt;');
-    // Robust image source logic
-    let imgSrc = p.image || '';
-    if (!imgSrc && p.localImage) {
-      const filename = p.localImage.split('/').pop();
-      imgSrc = `https://diariodaeducacao.com.br/images/produtos-bncc/${filename}`;
-    }
-    if (!imgSrc) {
-      imgSrc = `https://diariodaeducacao.com.br/images/produtos-bncc/${p.slug}.webp`;
-    }
+    // Use local images (relative path from discipline-pages/ to images/)
+    const imgSrc = `../images/${(p.localImage || 'images/' + p.slug + '.webp').replace('images/', '')}`;
 
-    // Force exactly ?src=github for all Hotmart links
-    let buyLink;
-    let baseLink = p.hotmartLink || p.link || '';
-    if (baseLink.includes('go.hotmart.com')) {
-      const urlBase = baseLink.split('?')[0];
-      buyLink = `${urlBase}?src=github`;
-    } else {
-      buyLink = baseLink.includes('?') ? `${baseLink}&src=github` : `${baseLink}?src=github`;
-    }
     const price = p.price ? `R$ ${p.price}` : '';
     const discount = p.discount ? `-${p.discount}%` : '';
+
+    const imgFallback = `this.onerror=null; if(this.src.includes('produtos-alfabetinho')){ this.src=this.src.replace('produtos-alfabetinho','produtos-bncc').replace('-1024x1024',''); } else { this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22300%22><rect fill=%22%23f0f0f0%22 width=%22300%22 height=%22300%22/><text x=%22150%22 y=%22150%22 text-anchor=%22middle%22 fill=%22%23999%22 font-size=%2216%22>Sem Imagem</text></svg>'; }`;
 
     return `
         <div class="product-card">
           <div class="card-image">
-            <img src="${imgSrc}" alt="${title}" loading="lazy" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22300%22><rect fill=%22%23f0f0f0%22 width=%22300%22 height=%22300%22/><text x=%22150%22 y=%22150%22 text-anchor=%22middle%22 fill=%22%23999%22 font-size=%2216%22>Sem Imagem</text></svg>'">
+            <img src="${imgSrc}" alt="${title}" loading="lazy" onerror="${imgFallback}">
             ${discount ? `<span class="discount-badge">${discount}</span>` : ''}
           </div>
           <div class="card-body">
@@ -276,7 +262,7 @@ function generatePage(page, matchedProducts, allPages) {
             <p class="card-desc">${desc}${desc.length >= 120 ? '...' : ''}</p>
             <div class="card-footer">
               ${price ? `<span class="card-price">${price}</span>` : ''}
-              <a href="${buyLink}" target="_blank" rel="noopener" class="buy-btn">Ver Produto →</a>
+              <a href="../products/${p.slug}.html" class="buy-btn">Ver Produto →</a>
             </div>
           </div>
         </div>`;
@@ -294,8 +280,8 @@ function generatePage(page, matchedProducts, allPages) {
             "@type": "Product",
             "name": "${p.title.replace(/"/g, '\\"')}",
             "description": "${(p.description || '').replace(/"/g, '\\"').substring(0, 200)}",
-            "url": "${p.hotmartLink || p.link}",
-            "image": "${p.image}"${p.price ? `,
+            "url": "${BASE_URL}/products/${p.slug}.html",
+            "image": "${BASE_URL}/${p.localImage || 'images/' + p.slug + '.webp'}"${p.price ? `,
             "offers": {
               "@type": "Offer",
               "priceCurrency": "BRL",
@@ -319,7 +305,7 @@ function generatePage(page, matchedProducts, allPages) {
   <meta property="og:url" content="${url}">
   <meta property="og:title" content="${page.title}">
   <meta property="og:description" content="${page.description}">
-  <meta property="og:image" content="${matchedProducts[0] ? matchedProducts[0].image : ''}">
+  <meta property="og:image" content="${matchedProducts[0] ? `${BASE_URL}/${matchedProducts[0].localImage || 'images/' + matchedProducts[0].slug + '.webp'}` : ''}">
   <meta property="og:locale" content="pt_BR">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="${page.title}">

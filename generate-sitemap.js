@@ -2,42 +2,47 @@ const fs = require('fs');
 const path = require('path');
 
 const products = JSON.parse(fs.readFileSync(path.join(__dirname, 'products.json'), 'utf8'));
-const BASE = 'https://tonibuch23.github.io/materiais-pedagogicos-bncc-2026';
+const BASE_URL = 'https://planodeaulapronto.github.io/planodeaulapronto';
 const today = new Date().toISOString().split('T')[0];
+
+// Discipline pages
+const disciplineDir = path.join(__dirname, 'discipline-pages');
+const disciplinePages = fs.existsSync(disciplineDir)
+  ? fs.readdirSync(disciplineDir).filter(f => f.endsWith('.html'))
+  : [];
 
 let xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>${BASE}/</loc>
+    <loc>${BASE_URL}/</loc>
     <lastmod>${today}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
-  </url>
+  </url>`;
+
+// Discipline pages (priority 0.9)
+disciplinePages.forEach(file => {
+  xml += `
   <url>
-    <loc>${BASE}/#educacao-infantil</loc>
+    <loc>${BASE_URL}/discipline-pages/${file}</loc>
     <lastmod>${today}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
-  </url>
+  </url>`;
+});
+
+// Individual product pages (priority 0.8)
+products.forEach(p => {
+  xml += `
   <url>
-    <loc>${BASE}/#ensino-fundamental-i</loc>
+    <loc>${BASE_URL}/products/${p.slug}.html</loc>
     <lastmod>${today}</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>${BASE}/#ensino-fundamental-ii</loc>
-    <lastmod>${today}</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>${BASE}/#ensino-medio</loc>
-    <lastmod>${today}</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-</urlset>`;
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>`;
+});
+
+xml += `\n</urlset>`;
 
 fs.writeFileSync(path.join(__dirname, 'sitemap.xml'), xml);
-console.log(`sitemap.xml created with category URLs`);
+console.log(`sitemap.xml created: 1 home + ${disciplinePages.length} discipline + ${products.length} products = ${1 + disciplinePages.length + products.length} URLs`);

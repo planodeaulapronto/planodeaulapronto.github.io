@@ -81,16 +81,8 @@ function generateCards(prods) {
   return prods.map(p => {
     const title = p.title.replace(/"/g, '&quot;').replace(/</g, '&lt;');
     const desc = (p.description || '').substring(0, 120).replace(/"/g, '&quot;').replace(/</g, '&lt;');
-    // Robust image source logic
-    let imgSrc = p.image || '';
-    if (!imgSrc && p.localImage) {
-      const filename = p.localImage.split('/').pop();
-      imgSrc = `https://diariodaeducacao.com.br/images/produtos-bncc/${filename}`;
-    }
-    // Final fallback attempt based on slug if still empty
-    if (!imgSrc) {
-      imgSrc = `https://diariodaeducacao.com.br/images/produtos-bncc/${p.slug}.webp`;
-    }
+    // Use local images (all 219 products have matching local files in images/)
+    const imgSrc = p.localImage || `images/${p.slug}.webp`;
 
     // Force exactly ?src=github for all Hotmart links
     let buyLink = p.hotmartLink || p.link || '';
@@ -103,10 +95,12 @@ function generateCards(prods) {
     const price = p.price ? `R$ ${p.price}` : '';
     const discount = p.discount ? `-${p.discount}%` : '';
 
+    const imgFallback = `this.onerror=null; if(this.src.includes('produtos-alfabetinho')){ this.src=this.src.replace('produtos-alfabetinho','produtos-bncc').replace('-1024x1024',''); } else { this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22300%22><rect fill=%22%23f0f0f0%22 width=%22300%22 height=%22300%22/><text x=%22150%22 y=%22150%22 text-anchor=%22middle%22 fill=%22%23999%22 font-size=%2216%22>Sem Imagem</text></svg>'; }`;
+
     return `
               <div class="product-card">
                 <div class="card-image">
-                  <img src="${imgSrc}" alt="${title}" loading="lazy" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22300%22><rect fill=%22%23f0f0f0%22 width=%22300%22 height=%22300%22/><text x=%22150%22 y=%22150%22 text-anchor=%22middle%22 fill=%22%23999%22 font-size=%2216%22>Sem Imagem</text></svg>'">
+                  <img src="${imgSrc}" alt="${title}" loading="lazy" onerror="${imgFallback}">
                   ${discount ? `<span class="discount-badge">${discount}</span>` : ''}
                 </div>
                 <div class="card-body">
@@ -114,7 +108,7 @@ function generateCards(prods) {
                   <p class="card-desc">${desc}${desc.length >= 120 ? '...' : ''}</p>
                   <div class="card-footer">
                     ${price ? `<span class="card-price">${price}</span>` : ''}
-                    <a href="${buyLink}" target="_blank" rel="noopener" class="buy-btn">Ver Produto →</a>
+                    <a href="products/${p.slug}.html" class="buy-btn">Ver Produto →</a>
                   </div>
                 </div>
               </div>`;
@@ -157,7 +151,7 @@ const html = `<!DOCTYPE html>
   <meta property="og:url" content="https://planodeaulapronto.github.io/planodeaulapronto/">
   <meta property="og:title" content="Materiais Pedagógicos BNCC 2026 | ${products.length} Produtos Prontos">
   <meta property="og:description" content="Planos de aula prontos, atividades, avaliações e slides alinhados à BNCC 2026. Da Educação Infantil ao Ensino Médio. Material editável para professores.">
-  <meta property="og:image" content="${products[0] ? products[0].image : ''}">
+  <meta property="og:image" content="${products[0] ? `https://planodeaulapronto.github.io/planodeaulapronto/${products[0].localImage || 'images/' + products[0].slug + '.webp'}` : ''}">
   <meta property="og:locale" content="pt_BR">
   <meta property="og:site_name" content="Materiais Pedagógicos BNCC 2026">
 
@@ -165,7 +159,7 @@ const html = `<!DOCTYPE html>
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Materiais Pedagógicos BNCC 2026 | ${products.length} Produtos Prontos">
   <meta name="twitter:description" content="Planos de aula prontos, atividades, avaliações e slides alinhados à BNCC 2026 para todos os níveis de ensino.">
-  <meta name="twitter:image" content="${products[0] ? products[0].image : ''}">
+  <meta name="twitter:image" content="${products[0] ? `https://planodeaulapronto.github.io/planodeaulapronto/${products[0].localImage || 'images/' + products[0].slug + '.webp'}` : ''}">
 
   <!-- Schema.org JSON-LD -->
   <script type="application/ld+json">
@@ -181,12 +175,8 @@ const html = `<!DOCTYPE html>
       "numberOfItems": ${products.length},
       "itemListElement": [
         ${products.slice(0, 30).map((p, i) => {
-  let buyLink = p.hotmartLink || p.link || '';
-  if (buyLink.includes('go.hotmart.com')) {
-    buyLink = buyLink.split('?')[0] + '?src=github';
-  } else {
-    buyLink += buyLink.includes('?') ? '&src=github' : '?src=github';
-  }
+  const productUrl = `https://planodeaulapronto.github.io/planodeaulapronto/products/${p.slug}.html`;
+  const productImg = `https://planodeaulapronto.github.io/planodeaulapronto/${p.localImage || 'images/' + p.slug + '.webp'}`;
   return `{
           "@type": "ListItem",
           "position": ${i + 1},
@@ -194,8 +184,8 @@ const html = `<!DOCTYPE html>
             "@type": "Product",
             "name": "${p.title.replace(/"/g, '\\"')}",
             "description": "${(p.description || '').replace(/"/g, '\\"').substring(0, 200)}",
-            "url": "${buyLink}",
-            "image": "${p.image}"${p.price ? `,
+            "url": "${productUrl}",
+            "image": "${productImg}"${p.price ? `,
             "offers": {
               "@type": "Offer",
               "priceCurrency": "BRL",

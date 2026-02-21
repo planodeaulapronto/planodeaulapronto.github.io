@@ -4,6 +4,7 @@ const { execSync } = require('child_process');
 
 const products = JSON.parse(fs.readFileSync(path.join(__dirname, 'products.json'), 'utf8'));
 const USERNAME = 'planodeaulapronto';
+const REPO = 'planodeaulapronto';
 
 const variants = [
     {
@@ -113,8 +114,22 @@ variants.forEach((v, idx) => {
     // Replace badge
     html = html.replace(/<div class="hero-badge">.*?<\/div>/, `<div class="hero-badge">${v.badge}</div>`);
 
-    // Links are inherited from pre-rendered index.html template
-    // which now uses src=github by default
+    // Replace internal product page links with direct Hotmart links for variant repos
+    // (variant repos don't have products/ directory, so link directly to Hotmart)
+    products.forEach(p => {
+      let buyLink = p.hotmartLink || p.link || '';
+      if (buyLink.includes('go.hotmart.com')) {
+        buyLink = buyLink.split('?')[0] + `?src=${v.src}`;
+      }
+      html = html.replace(
+        new RegExp(`href="products/${p.slug}\\.html"`, 'g'),
+        `href="${buyLink}" target="_blank" rel="noopener"`
+      );
+    });
+
+    // Also fix image paths: variants are at root level, images are in main repo
+    // Replace relative local image paths with absolute GitHub Pages URLs
+    html = html.replace(/src="images\//g, `src="https://${USERNAME}.github.io/${REPO}/images/`);
 
     // Write index.html
     fs.writeFileSync(path.join(dir, 'index.html'), html);

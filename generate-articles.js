@@ -87,13 +87,14 @@ function generateArticleHtml(article) {
     });
   }
 
-  const related = products.sort(() => 0.5 - Math.random()).slice(0, 3);
+  // Pick 15 random related products
+  const related = products.sort(() => 0.5 - Math.random()).slice(0, 15);
   const relatedHtml = related.map(p => `
     <div class="product-mini-card">
-        <img src="../images/${(p.localImage || 'images/' + p.slug + '.webp').replace('images/', '')}" alt="${p.title}">
+        <img src="../images/${(p.localImage || 'images/' + p.slug + '.webp').replace('images/', '')}" alt="\${p.title.replace(/"/g, '&quot;')}" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2260%22 height=%2260%22><rect fill=%22%23eee%22 width=%2260%22 height=%2260%22/></svg>'">
         <div>
             <h4>${p.title}</h4>
-            <a href="../produtos/${p.slug}.html" class="view-btn">Ver Material</a>
+            <a href="../produtos/${p.slug}.html" class="view-btn">Ver Material →</a>
         </div>
     </div>
   `).join('');
@@ -106,30 +107,37 @@ function generateArticleHtml(article) {
   <title>${article.title} | Blog Pedagógico</title>
   <style>
     :root { --primary: #4F46E5; --dark: #1a1a2e; --text: #2d3748; --radius: 16px; }
-    body { font-family: sans-serif; color: var(--text); background: #f8fafc; margin: 0; }
-    .nav-bar { background: white; padding: 15px 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
-    .logo { font-weight: 800; color: var(--primary); text-decoration: none; font-size: 1.2rem; }
-    .container { max-width: 1100px; margin: 0 auto; padding: 40px 20px; display: grid; grid-template-columns: 1fr 320px; gap: 40px; }
+    body { font-family: sans-serif; color: var(--text); background: #f8fafc; margin: 0; line-height: 1.6; }
+    .nav-bar { background: white; padding: 15px 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
+    .logo { font-weight: 800; color: var(--primary); text-decoration: none; font-size: 1.2rem; display: flex; align-items: center; gap: 8px; }
+    .container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; display: grid; grid-template-columns: 1fr 350px; gap: 40px; }
     .content-area { background: white; padding: 40px; border-radius: var(--radius); box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
-    h1 { font-size: 2.2rem; color: var(--dark); margin-top: 0; }
-    .product-mini-card { display: flex; gap: 12px; margin-bottom: 15px; background: #f8fafc; padding: 10px; border-radius: 10px; }
-    .product-mini-card img { width: 60px; height: 60px; border-radius: 6px; object-fit: cover; }
+    h1 { font-size: 2.2rem; color: var(--dark); margin-top: 0; line-height: 1.2; }
+    .product-mini-card { display: flex; gap: 12px; margin-bottom: 20px; background: #fff; padding: 12px; border-radius: 12px; border: 1px solid #eee; transition: transform 0.2s; }
+    .product-mini-card:hover { transform: translateX(5px); border-color: var(--primary); }
+    .product-mini-card img { width: 70px; height: 70px; border-radius: 8px; object-fit: cover; }
+    .product-mini-card h4 { font-size: 0.85rem; margin: 0 0 5px 0; color: var(--dark); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
     .view-btn { font-size: 0.75rem; color: var(--primary); font-weight: 700; text-decoration: none; }
+    aside h4 { margin-top: 0; font-size: 1.2rem; color: var(--primary); border-bottom: 2px solid #eef2ff; padding-bottom: 10px; margin-bottom: 20px; }
+    @media (max-width: 900px) { .container { grid-template-columns: 1fr; } .content-area { padding: 25px; } }
   </style>
 </head>
 <body>
   <nav class="nav-bar">
     <a href="../index.html" class="logo">📚 Materiais BNCC</a>
-    <div style="display:flex; gap:15px;">
-        <a href="../index.html" style="font-weight: 600; color: var(--text); text-decoration: none;">Início</a>
-        <a href="index.html" style="font-weight: 600; color: var(--text); text-decoration: none;">📰 Artigos</a>
+    <div style="display:flex; gap:20px; align-items:center;">
+        <a href="../index.html" style="font-weight: 700; color: var(--primary); text-decoration: none; display: flex; align-items: center; gap: 5px;">
+           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+           Voltar ao Início
+        </a>
+        <a href="index.html" style="font-weight: 600; color: var(--text); text-decoration: none;">📰 Blog</a>
     </div>
   </nav>
   <div class="container">
     <main class="content-area">${htmlBody}</main>
     <aside>
-      <div style="background: #EEF2FF; padding: 20px; border-radius: 16px;">
-        <h4>🌟 Recomendados</h4>
+      <div style="background: #f8fafc; padding: 25px; border-radius: 20px; border: 1px solid #eef2ff; position: sticky; top: 80px; max-height: calc(100vh - 120px); overflow-y: auto;">
+        <h4>🔥 Materiais Recomendados</h4>
         ${relatedHtml}
       </div>
     </aside>
@@ -148,45 +156,54 @@ const articleIndex = articles.map(a => ({
 }));
 fs.writeFileSync(path.join(__dirname, 'search-index-articles.json'), JSON.stringify(articleIndex));
 
-const categories = [...new Set(articles.map(a => a.category))];
 const indexHtml = `<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Blog Pedagógico</title>
+  <title>Blog Pedagógico | Artigos e Dicas para Professores</title>
   <style>
+    :root { --primary: #4F46E5; --dark: #1a1a2e; }
     body { font-family: sans-serif; background: #f8fafc; margin: 0; }
-    header { background: #1a1a2e; color: white; padding: 60px 20px; text-align: center; }
-    .nav-top { background: #fff; padding: 10px 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); display: flex; justify-content: space-between; }
-    .search-box { max-width: 600px; margin: 20px auto; }
-    .search-box input { width: 100%; padding: 15px; border-radius: 30px; border: none; }
-    .grid { max-width: 1200px; margin: 40px auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; padding: 0 20px; }
-    .card { background: white; padding: 25px; border-radius: 16px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+    .nav-top { background: #fff; padding: 15px 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center; }
+    header { background: linear-gradient(135deg, var(--dark) 0%, #252545 100%); color: white; padding: 60px 20px; text-align: center; }
+    .search-box { max-width: 600px; margin: 30px auto 0; position: relative; }
+    .search-box input { width: 100%; padding: 18px 25px; border-radius: 50px; border: none; box-shadow: 0 10px 25px rgba(0,0,0,0.1); font-size: 1rem; outline: none; }
+    .grid { max-width: 1200px; margin: 40px auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px; padding: 0 20px; }
+    .card { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); transition: all 0.3s ease; border: 1px solid transparent; display: flex; flex-direction: column; }
+    .card:hover { transform: translateY(-5px); border-color: var(--primary); box-shadow: 0 12px 30px rgba(79,70,229,0.1); }
+    .card small { color: var(--primary); font-weight: 700; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.5px; }
+    .card h3 { margin: 15px 0; color: var(--dark); line-height: 1.3; font-size: 1.25rem; flex: 1; }
+    .card a { color: var(--primary); text-decoration: none; font-weight: 700; font-size: 0.9rem; display: flex; align-items: center; gap: 5px; }
     .pagination { text-align: center; padding: 40px; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
-    .page-btn { padding: 8px 15px; background: white; border: 1px solid #ddd; border-radius: 5px; cursor: pointer; text-decoration: none; color: #333; }
-    .page-btn.active { background: #4F46E5; color: white; border-color: #4F46E5; }
+    .page-btn { padding: 10px 20px; background: white; border: 1px solid #eef2ff; border-radius: 12px; cursor: pointer; text-decoration: none; color: #444; font-weight: 600; transition: all 0.3s; }
+    .page-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+    .page-btn:hover:not(.active) { background: #f0f4ff; }
   </style>
 </head>
 <body>
   <nav class="nav-top">
-    <a href="../index.html" style="font-weight: 800; color: #4F46E5; text-decoration: none;">📚 Voltar ao Início</a>
-    <span>📰 Artigos e Dicas</span>
+    <a href="../index.html" style="font-weight: 800; color: var(--primary); text-decoration: none; display: flex; align-items: center; gap: 8px;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+      Voltar ao Início do Site
+    </a>
+    <span style="font-weight: 600; color: #666;">📰 Artigos e Dicas</span>
   </nav>
   <header>
-    <h1>Blog Pedagógico 📰</h1>
+    <h1 style="font-size: 2.5rem; margin-bottom: 10px;">Blog Pedagógico 📰</h1>
+    <p style="font-size: 1.1rem; opacity: 0.8;">As melhores dicas, notícias e materiais para educadores</p>
     <div class="search-box">
-      <input type="text" id="blogSearch" placeholder="Buscar artigos e produtos...">
+      <input type="text" id="blogSearch" placeholder="O que você está procurando?">
     </div>
   </header>
   <div class="grid" id="blogGrid"></div>
   <div class="pagination" id="pagination"></div>
 
   <script>
-    const articles = ${JSON.stringify(articles.map(a => ({ title: a.title, category: a.category, slug: a.slug })))};
+    const allArticles = ${JSON.stringify(articles.map(a => ({ title: a.title, category: a.category, slug: a.slug })))};
     const itemsPerPage = 20;
     let currentPage = 1;
-    let filteredArticles = articles;
+    let filteredArticles = allArticles;
 
     const blogGrid = document.getElementById('blogGrid');
     const pagination = document.getElementById('pagination');
@@ -201,8 +218,11 @@ const indexHtml = `<!DOCTYPE html>
       blogGrid.innerHTML = pageItems.map(a => \`
         <div class="card">
           <small>\${a.category}</small>
-          <h3>\${a.title}h3>
-          <a href="\${a.slug}.html">Ler mais</a>
+          <h3>\${a.title}</h3>
+          <a href="\${a.slug}.html">
+            Ler Artigo Completo
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+          </a>
         </div>
       \`).join('');
 
@@ -214,22 +234,26 @@ const indexHtml = `<!DOCTYPE html>
       pagination.innerHTML = '';
       if (pageCount <= 1) return;
 
-      for (let i = 1; i <= pageCount; i++) {
+      const maxButtons = 5;
+      let startPage = Math.max(1, currentPage - 2);
+      let endPage = Math.min(pageCount, startPage + maxButtons - 1);
+      
+      if (endPage - startPage < maxButtons - 1) {
+          startPage = Math.max(1, endPage - maxButtons + 1);
+      }
+
+      for (let i = startPage; i <= endPage; i++) {
         const btn = document.createElement('button');
         btn.innerText = i;
         btn.className = 'page-btn' + (i === currentPage ? ' active' : '');
-        btn.addEventListener('click', () => {
-          currentPage = i;
-          render();
-          window.scrollTo(0, 0);
-        });
+        btn.onclick = () => { currentPage = i; render(); window.scrollTo(0, 0); };
         pagination.appendChild(btn);
       }
     }
 
     searchInput.addEventListener('input', () => {
       const q = searchInput.value.toLowerCase();
-      filteredArticles = articles.filter(a => a.title.toLowerCase().includes(q));
+      filteredArticles = allArticles.filter(a => a.title.toLowerCase().includes(q));
       currentPage = 1;
       render();
     });
@@ -240,4 +264,4 @@ const indexHtml = `<!DOCTYPE html>
 </html>`;
 
 fs.writeFileSync(path.join(outputDir, 'index.html'), indexHtml);
-console.log('Done: ' + articles.length + ' articles.');
+console.log('Done: ' + articles.length + ' articles generated with backlinks and 15 related products.');

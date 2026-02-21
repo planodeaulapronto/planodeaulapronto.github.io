@@ -392,14 +392,11 @@ const html = `<!DOCTYPE html>
       max-width: 1400px;
       margin: 0 auto;
       display: flex;
-      gap: 10px;
-      overflow-x: auto;
-      padding: 4px;
-      scrollbar-width: thin;
-      scrollbar-color: #cbd5e0 transparent;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+      padding: 10px 4px;
     }
-    .cat-nav-inner::-webkit-scrollbar { height: 4px; }
-    .cat-nav-inner::-webkit-scrollbar-thumb { background: #cbd5e0; border-radius: 4px; }
     .cat-btn {
       display: inline-flex;
       align-items: center;

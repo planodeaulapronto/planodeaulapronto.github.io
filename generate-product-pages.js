@@ -81,35 +81,90 @@ const cssStyles = `
     .breadcrumb a { color: var(--primary); text-decoration: none; }
     .breadcrumb a:hover { text-decoration: underline; }
     .product-detail { max-width: 1000px; margin: 30px auto; padding: 0 20px; }
-    .product-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; background: white; border-radius: var(--radius); padding: 32px; box-shadow: var(--shadow); }
-    .product-image-container { position: relative; }
+    .product-layout { display: grid; grid-template-columns: 350px 1fr; gap: 50px; background: white; border-radius: var(--radius); padding: 40px; box-shadow: var(--shadow); }
+    .product-image-container { position: sticky; top: 100px; height: fit-content; }
     .product-image-container img { width: 100%; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
     .product-info { display: flex; flex-direction: column; }
-    .product-info h2 { font-family: 'Outfit', sans-serif; font-size: 1.5rem; font-weight: 700; color: var(--dark); margin-bottom: 16px; line-height: 1.3; }
-    .product-description { color: var(--text-light); line-height: 1.8; margin-bottom: 24px; font-size: 0.95rem; flex: 1; }
-    .product-features { list-style: none; margin: 0 0 24px 0; padding: 0; }
-    .product-features li { padding: 10px 0; border-bottom: 1px solid #edf2f7; font-size: 0.9rem; color: var(--text); }
-    .product-price { font-family: 'Outfit', sans-serif; font-size: 2rem; color: #16a34a; font-weight: 700; margin-bottom: 20px; }
-    .buy-btn-large { display: inline-flex; align-items: center; justify-content: center; width: 100%; padding: 16px 32px; font-size: 1.1rem; font-weight: 700; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; border-radius: 30px; text-decoration: none; transition: all 0.3s ease; }
-    .buy-btn-large:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(108,99,255,0.4); }
-    .related-section { max-width: 1000px; margin: 50px auto; padding: 0 20px; }
-    .related-section h2 { font-family: 'Outfit', sans-serif; font-size: 1.4rem; margin-bottom: 20px; color: var(--dark); }
-    .related-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
-    .product-card { background: var(--card-bg); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); transition: all 0.35s ease; display: flex; flex-direction: column; }
-    .product-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); }
-    .card-image { position: relative; width: 100%; aspect-ratio: 4/3; overflow: hidden; background: #f7fafc; }
+    .product-info h2 { font-family: 'Outfit', sans-serif; font-size: 2rem; font-weight: 800; color: var(--dark); margin-bottom: 24px; line-height: 1.2; letter-spacing: -0.5px; }
+    .product-description { color: var(--text); line-height: 1.8; margin-bottom: 16px; font-size: 1.05rem; }
+    .product-description h2 { font-size: 1.6rem; margin-top: 40px; margin-bottom: 16px; color: var(--primary); }
+    .product-description h3 { font-size: 1.3rem; margin-top: 30px; margin-bottom: 12px; color: var(--dark); }
+    .product-description p { margin-bottom: 20px; }
+    .product-description ul, .product-description ol { margin-bottom: 24px; padding-left: 20px; }
+    .product-description li { margin-bottom: 10px; }
+    .product-description strong { color: var(--dark); font-weight: 700; }
+    .product-features { list-style: none; margin: 30px 0; padding: 20px; background: #f0f4ff; border-radius: 12px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .product-features li { padding: 5px 0; font-size: 0.9rem; color: #4F46E5; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+    .product-features li::before { content: '✓'; font-weight: 900; }
+    .buy-section-top { margin: 30px 0; padding: 32px; background: #fff; border: 2px solid #edf2f7; border-radius: 16px; text-align: center; display: flex; flex-direction: column; gap: 16px; align-items: center; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+    .buy-section-top .product-price { margin-bottom: 0; font-size: 3rem; color: #16a34a; font-weight: 800; font-family: 'Outfit', sans-serif; }
+    .related-section { max-width: 1000px; margin: 60px auto; padding: 0 20px; }
+    .related-section h2 { font-family: 'Outfit', sans-serif; font-size: 1.8rem; margin-bottom: 30px; color: var(--dark); text-align: center; }
+    .related-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 25px; }
+    .product-card { background: var(--card-bg); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); transition: all 0.35s ease; display: flex; flex-direction: column; height: 100%; border: 1px solid #edf2f7; }
+    .product-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-hover); border-color: var(--primary); }
+    .card-image { position: relative; width: 100%; aspect-ratio: 1/1; overflow: hidden; background: #f7fafc; }
     .card-image img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; }
-    .product-card:hover .card-image img { transform: scale(1.05); }
-    .card-body { padding: 16px; display: flex; flex-direction: column; flex: 1; }
-    .card-title { font-family: 'Outfit', sans-serif; font-size: 0.9rem; font-weight: 700; color: var(--dark); line-height: 1.3; margin-bottom: 8px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-    .card-footer { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding-top: 12px; border-top: 1px solid #edf2f7; margin-top: auto; }
-    .card-price { font-family: 'Outfit', sans-serif; font-size: 1rem; font-weight: 700; color: #16a34a; }
-    .buy-btn { display: inline-flex; align-items: center; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; padding: 8px 16px; border-radius: 30px; text-decoration: none; font-size: 0.8rem; font-weight: 600; transition: all 0.3s ease; white-space: nowrap; }
-    .buy-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 15px rgba(108,99,255,0.4); }
-    .footer { background: var(--darker); color: rgba(255,255,255,0.5); text-align: center; padding: 40px 20px; margin-top: 60px; }
-    .footer a { color: var(--accent); text-decoration: none; }
-    .buy-section-top { margin: 24px 0; padding: 24px; background: #f8fafc; border: 2px dashed #edf2f7; border-radius: 12px; text-align: center; display: flex; flex-direction: column; gap: 16px; align-items: center; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); }
-    .buy-section-top .product-price { margin-bottom: 0; font-size: 2.4rem; color: #16a34a; font-weight: 800; font-family: 'Outfit', sans-serif; }
+    .product-card:hover .card-image img { transform: scale(1.08); }
+    .card-body { padding: 18px; display: flex; flex-direction: column; flex: 1; }
+    .card-title { font-family: 'Outfit', sans-serif; font-size: 0.95rem; font-weight: 700; color: var(--dark); line-height: 1.4; margin-bottom: 12px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; flex: 1; }
+    .card-footer { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding-top: 15px; border-top: 1px solid #edf2f7; }
+    .card-price { font-family: 'Outfit', sans-serif; font-size: 1.1rem; font-weight: 800; color: #16a34a; }
+    .buy-btn-large { 
+      display: inline-flex; 
+      align-items: center; 
+      justify-content: center; 
+      width: 100%; 
+      padding: 28px 48px; 
+      font-size: 1.6rem; 
+      font-weight: 900; 
+      background: linear-gradient(135deg, #10b981, #059669); 
+      color: white; 
+      border-radius: 60px; 
+      text-decoration: none; 
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+      box-shadow: 0 15px 35px rgba(16, 185, 129, 0.4), 0 0 20px rgba(16, 185, 129, 0.2);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      animation: pulse-green 2s infinite;
+      border: 3px solid rgba(255,255,255,0.2);
+    }
+    .buy-btn-large:hover { 
+      transform: scale(1.06) translateY(-5px); 
+      box-shadow: 0 20px 45px rgba(16, 185, 129, 0.5), 0 0 30px rgba(16, 185, 129, 0.3); 
+      background: linear-gradient(135deg, #059669, #10b981);
+      border-color: white;
+    }
+    @keyframes pulse-green {
+      0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+      70% { box-shadow: 0 0 0 20px rgba(16, 185, 129, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+    }
+    .buy-btn { display: inline-flex; align-items: center; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; padding: 10px 20px; border-radius: 30px; text-decoration: none; font-size: 0.85rem; font-weight: 700; transition: all 0.3s ease; }
+    .footer { background: var(--darker); color: rgba(255,255,255,0.6); text-align: center; padding: 80px 20px; margin-top: 100px; font-size: 0.95rem; border-top: 1px solid rgba(255,255,255,0.05); }
+    .footer a { color: var(--accent); text-decoration: none; font-weight: 600; }
+    
+    /* Related Section Fix */
+    .related-section { max-width: 1100px; margin: 80px auto; padding: 0 20px; }
+    .related-grid { 
+      display: grid; 
+      grid-template-columns: repeat(auto-fit, minmax(240px, 280px)); 
+      gap: 30px; 
+      justify-content: center;
+    }
+    .product-card { 
+      background: var(--card-bg); 
+      border-radius: var(--radius); 
+      overflow: hidden; 
+      box-shadow: var(--shadow); 
+      transition: all 0.35s ease; 
+      display: flex; 
+      flex-direction: column; 
+      height: 100%; 
+      border: 1px solid #edf2f7;
+      max-width: 300px; /* Prevent gigantic cards */
+      margin: 0 auto;
+    }
     @media (max-width: 768px) {
       .product-layout { grid-template-columns: 1fr; gap: 24px; padding: 20px; }
       .related-grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
@@ -248,18 +303,30 @@ function generateProductPage(product, relatedProducts) {
   const imgSrc = `../images/${(product.localImage || `images/${product.slug}.webp`).replace('images/', '')}`;
   const imgAbsolute = `${BASE_URL}/${product.localImage || 'images/' + product.slug + '.webp'}`;
 
-  // Hotmart link - force ?src=github
-  let buyLink = product.hotmartLink || product.link || '';
-  if (buyLink.includes('go.hotmart.com')) {
-    buyLink = buyLink.split('?')[0] + '?src=github';
-  }
+  // Site Oficial link for SEO Authority
+  const buyLink = product.link || product.hotmartLink || '';
 
   const price = product.price ? `R$ ${product.price}` : '';
   const title = product.title.replace(/"/g, '&quot;').replace(/</g, '&lt;');
   const titleJson = product.title.replace(/"/g, '\\"');
+
   const descRaw = product.description || '';
-  const descClean = descRaw.replace(/^#+\s*/gm, '').replace(/\*\*/g, '').trim();
-  const metaDesc = descClean.substring(0, 160) || `${product.title} - Material pedagógico alinhado à BNCC 2026. Editável e pronto para uso em sala de aula.`;
+  // For meta description, we need plain text
+  const descPlainText = descRaw.replace(/<[^>]*>?/gm, '').replace(/^#+\s*/gm, '').replace(/\*\*/g, '').trim();
+  const metaDesc = descPlainText.substring(0, 160) || `${product.title} - Material pedagógico alinhado à BNCC 2026. Editável e pronto para uso em sala de aula.`;
+
+  // For the page body, if it looks like HTML, keep it. If not, do some basic wrapping.
+  let descHtml = descRaw;
+  if (!descRaw.includes('<p>') && !descRaw.includes('<h2>')) {
+    descHtml = descRaw
+      .replace(/^# (.*)/gm, '<h1>$1</h1>')
+      .replace(/^## (.*)/gm, '<h2>$1</h2>')
+      .replace(/^### (.*)/gm, '<h3>$1</h3>')
+      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+      .replace(/\n\n/g, '</p><p>')
+      .replace(/\n/g, '<br>');
+    if (!descHtml.startsWith('<h')) descHtml = '<p>' + descHtml + '</p>';
+  }
   const keywords = generateKeywords(product, category);
   const faqs = generateFAQ(product, category);
   const rating = generateRating(product.slug);
@@ -315,7 +382,7 @@ function generateProductPage(product, relatedProducts) {
     "@context": "https://schema.org",
     "@type": "Product",
     "name": "${titleJson}",
-    "description": "${descClean.substring(0, 300).replace(/"/g, '\\"')}",
+    "description": "${descPlainText.substring(0, 300).replace(/"/g, '\\"')}",
     "url": "${url}",
     "image": "${imgAbsolute}",
     "brand": {
@@ -417,12 +484,12 @@ function generateProductPage(product, relatedProducts) {
         
         <div class="buy-section-top">
           ${price ? `<div class="product-price">${price}</div>` : ''}
-          <a href="${buyLink}" target="_blank" rel="noopener" class="buy-btn-large">
-            Comprar Agora &rarr;
+          <a href="${buyLink}" target="_blank" rel="dofollow" class="buy-btn-large">
+            Ver Material no Site Oficial &rarr;
           </a>
         </div>
         
-        <p class="product-description">${descClean}</p>
+        <div class="product-description">${descHtml}</div>
         <ul class="product-features">
           <li>Alinhado à BNCC 2026</li>
           <li>Material editável (Word/PowerPoint)</li>

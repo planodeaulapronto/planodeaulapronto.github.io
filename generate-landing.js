@@ -72,10 +72,18 @@ function generateCatNav() {
     const colors = catColors[cat];
     const icon = catIcons[cat];
     const id = cat.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '-').toLowerCase();
-    return `<a href="#${id}" class="cat-btn" style="background: ${colors.gradient}">${icon} ${cat} <span class="cat-count">${categories[cat].length}</span></a>`;
+    return `<a href="#${id}" class="cat-btn" style="background: ${colors.gradient}">
+              <span class="cat-icon">${icon}</span>
+              <span class="cat-name">${cat}</span>
+              <span class="cat-count">${categories[cat].length}</span>
+            </a>`;
   }).join('\n            ');
 
-  return categoriesHtml + `\n            <a href="artigos/index.html" class="cat-btn" style="background: linear-gradient(135deg, #4F46E5, #3730A3)">📰 Artigos e Dicas</a>`;
+  return categoriesHtml + `
+            <a href="artigos/index.html" class="cat-btn" style="background: linear-gradient(135deg, #4F46E5, #3730A3)">
+              <span class="cat-icon">📰</span>
+              <span class="cat-name">Artigos e Dicas</span>
+            </a>`;
 }
 
 // Generate product cards for a category
@@ -395,23 +403,31 @@ const html = `<!DOCTYPE html>
     .cat-btn {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      padding: 10px 18px;
-      border-radius: 30px;
+      gap: 10px;
+      padding: 12px 24px;
+      border-radius: 50px;
       color: white;
       text-decoration: none;
-      font-size: 0.85rem;
-      font-weight: 600;
+      font-size: 0.95rem;
+      font-weight: 700;
       white-space: nowrap;
-      transition: all 0.3s ease;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      border: 2px solid rgba(255,255,255,0.1);
     }
-    .cat-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.25); }
+    .cat-btn:hover { 
+      transform: translateY(-5px) scale(1.05); 
+      box-shadow: 0 12px 25px rgba(0,0,0,0.2);
+      border-color: rgba(255,255,255,0.4);
+    }
+    .cat-icon { font-size: 1.4rem; }
     .cat-count {
-      background: rgba(255,255,255,0.3);
-      padding: 2px 8px;
-      border-radius: 12px;
-      font-size: 0.75rem;
+      background: rgba(255,255,255,0.25);
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 800;
+      backdrop-filter: blur(4px);
     }
 
     /* ===== CATEGORY SECTIONS ===== */

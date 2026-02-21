@@ -1,8 +1,4 @@
 node_modules/
 page_raw.html
 *.log
-generate-landing.js
-generate-sitemap.js
-generate-canva.js
 scraper.js
-canva/generate-canva.js

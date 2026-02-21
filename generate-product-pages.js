@@ -242,7 +242,7 @@ function generateProductPage(product, relatedProducts) {
   const colors = catColors[category];
   const icon = catIcons[category];
   const categoryId = category.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '-').toLowerCase();
-  const url = `${BASE_URL}/products/${product.slug}.html`;
+  const url = `${BASE_URL}/produtos/${product.slug}.html`;
 
   // Local image
   const imgSrc = `../images/${(product.localImage || `images/${product.slug}.webp`).replace('images/', '')}`;
@@ -448,7 +448,7 @@ function generateProductPage(product, relatedProducts) {
 }
 
 // Create output directory
-const outputDir = path.join(__dirname, 'products');
+const outputDir = path.join(__dirname, 'produtos');
 if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir, { recursive: true });
 
 // Generate all product pages
@@ -460,4 +460,4 @@ products.forEach((product, idx) => {
   if ((idx + 1) % 50 === 0) console.log(`Generated ${idx + 1}/${products.length} product pages`);
 });
 
-console.log(`\nGenerated ${products.length} individual product pages in products/`);
+console.log(`\nGenerated ${products.length} individual product pages in produtos/`);

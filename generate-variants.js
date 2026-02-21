@@ -116,12 +116,12 @@ variants.forEach((v, idx) => {
 
     // Link variants to the canonical product pages instead of skipping them.
     products.forEach(p => {
-        // Direct relative link to products/slug.html won't work perfectly on GitHub Pages variants because we don't copy the products folder, 
-        // but we can link to the absolute canonical URL where the products/ folder exists (main repo).
+        // Direct relative link to produtos/slug.html won't work perfectly on GitHub Pages variants because we don't copy the products folder, 
+        // but we can link to the absolute canonical URL where the produtos/ folder exists (main repo).
         // This solves the SEO requirement "cada produto deve ter uma pagina unica".
         html = html.replace(
-            new RegExp(`href="products/${p.slug}\\.html"`, 'g'),
-            `href="https://${USERNAME}.github.io/${REPO}/products/${p.slug}.html"`
+            new RegExp(`href="produtos/${p.slug}\\.html"`, 'g'),
+            `href="https://${USERNAME}.github.io/${REPO}/produtos/${p.slug}.html"`
         );
     });
 

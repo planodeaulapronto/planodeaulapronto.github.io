@@ -68,12 +68,14 @@ catOrder.forEach(cat => {
 
 // Generate category nav buttons
 function generateCatNav() {
-  return catOrder.filter(c => categories[c] && categories[c].length > 0).map(cat => {
+  const categoriesHtml = catOrder.filter(c => categories[c] && categories[c].length > 0).map(cat => {
     const colors = catColors[cat];
     const icon = catIcons[cat];
     const id = cat.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '-').toLowerCase();
     return `<a href="#${id}" class="cat-btn" style="background: ${colors.gradient}">${icon} ${cat} <span class="cat-count">${categories[cat].length}</span></a>`;
   }).join('\n            ');
+
+  return categoriesHtml + `\n            <a href="artigos/index.html" class="cat-btn" style="background: linear-gradient(135deg, #4F46E5, #3730A3)">📰 Artigos e Dicas</a>`;
 }
 
 // Generate product cards for a category
@@ -108,7 +110,7 @@ function generateCards(prods) {
                   <p class="card-desc">${desc}${desc.length >= 120 ? '...' : ''}</p>
                   <div class="card-footer">
                     ${price ? `<span class="card-price">${price}</span>` : ''}
-                    <a href="products/${p.slug}.html" class="buy-btn">Ver Produto →</a>
+                    <a href="produtos/${p.slug}.html" class="buy-btn">Ver Produto →</a>
                   </div>
                 </div>
               </div>`;
@@ -175,7 +177,7 @@ const html = `<!DOCTYPE html>
       "numberOfItems": ${products.length},
       "itemListElement": [
         ${products.slice(0, 30).map((p, i) => {
-  const productUrl = `https://planodeaulapronto.github.io/planodeaulapronto/products/${p.slug}.html`;
+  const productUrl = `https://planodeaulapronto.github.io/planodeaulapronto/produtos/${p.slug}.html`;
   const productImg = `https://planodeaulapronto.github.io/planodeaulapronto/${p.localImage || 'images/' + p.slug + '.webp'}`;
   return `{
           "@type": "ListItem",
@@ -708,39 +710,90 @@ const html = `<!DOCTYPE html>
       document.getElementById('backToTop').classList.toggle('visible', window.scrollY > 400);
     });
 
-    // Search functionality
+    // --- GLOBAL SEARCH LOGIC ---
+    let searchIndex = [];
+    
+    // Fetch indexes
+    async function loadIndexes() {
+      try {
+        const prodRes = await fetch('search-index-products.json');
+        const prodData = await prodRes.json();
+        searchIndex = [...prodData];
+        
+        const artRes = await fetch('search-index-articles.json');
+        if (artRes.ok) {
+          const artData = await artRes.json();
+          searchIndex = [...searchIndex, ...artData];
+        }
+      } catch (e) { console.error('Index load failed', e); }
+    }
+    loadIndexes();
+
     const searchInput = document.getElementById('searchInput');
     const sections = document.querySelectorAll('.category-section');
     const noResults = document.getElementById('noResults');
+    const productsMain = document.getElementById('productsMain');
+    const catNav = document.querySelector('.cat-nav');
     
+    // Create results overlay container
+    const resultsOverlay = document.createElement('div');
+    resultsOverlay.id = 'searchOverlay';
+    resultsOverlay.style.cssText = 'display: none; position: absolute; top: 100%; left: 0; right: 0; background: white; border-radius: 12px; box-shadow: 0 15px 50px rgba(0,0,0,0.25); z-index: 1000; max-height: 450px; overflow-y: auto; padding: 5px; margin-top: 15px; color: #333; border: 1px solid rgba(0,0,0,0.05); scrollbar-width: thin;';
+    searchInput.parentElement.appendChild(resultsOverlay);
+
     searchInput.addEventListener('input', (e) => {
-      const query = e.target.value.toLowerCase().normalize('NFD').replace(/[\\u0300-\\u036f]/g, '');
-      let totalVisible = 0;
+      const query = e.target.value.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
       
-      sections.forEach(section => {
-        const cards = section.querySelectorAll('.product-card');
-        let sectionVisible = 0;
-        
-        cards.forEach(card => {
-          const title = card.querySelector('.card-title').textContent.toLowerCase().normalize('NFD').replace(/[\\u0300-\\u036f]/g, '');
-          const desc = card.querySelector('.card-desc').textContent.toLowerCase().normalize('NFD').replace(/[\\u0300-\\u036f]/g, '');
-          const match = !query || title.includes(query) || desc.includes(query);
-          card.style.display = match ? '' : 'none';
-          if (match) sectionVisible++;
-        });
-        
-        section.style.display = sectionVisible > 0 ? '' : 'none';
-        totalVisible += sectionVisible;
-      });
-      
-      noResults.classList.toggle('show', totalVisible === 0 && query.length > 0);
+      if (!query) {
+        resultsOverlay.style.display = 'none';
+        productsMain.style.display = 'block';
+        catNav.style.display = 'block';
+        sections.forEach(s => s.style.display = '');
+        return;
+      }
+
+      // Hide standard sections when searching
+      productsMain.style.display = 'none';
+      catNav.style.display = 'none';
+
+      const matches = searchIndex.filter(item => 
+        item.title.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').includes(query)
+      ).slice(0, 15);
+
+      if (matches.length > 0) {
+        resultsOverlay.style.display = 'block';
+        resultsOverlay.innerHTML = matches.map(item => {
+            let priceTag = item.price ? '<span style="font-weight: 800; color: #16a34a; font-size: 0.85rem">R$ ' + item.price + '</span>' : '';
+            return '<a href="' + item.url + '" style="display: flex; align-items: center; gap: 10px; padding: 12px; text-decoration: none; border-bottom: 1px solid #f1f5f9; transition: background 0.2s;">' +
+                   '<span style="font-size: 1.2rem">' + (item.type === 'article' ? '📰' : '📦') + '</span>' +
+                   '<div style="flex: 1">' +
+                   '  <div style="font-weight: 700; color: #1a1a2e; font-size: 0.9rem">' + item.title + '</div>' +
+                   '  <div style="font-size: 0.75rem; color: #64748b">' + (item.category || item.type) + '</div>' +
+                   '</div>' +
+                   priceTag +
+                   '</a>';
+        }).join('') + '<div style="text-align: center; padding: 10px; font-size: 0.8rem; color: #94a3b8">Mostrando ' + matches.length + ' resultados</div>';
+      } else {
+        resultsOverlay.style.display = 'block';
+        resultsOverlay.innerHTML = '<div style="padding: 20px; text-align: center; color: #64748b">Nenhum resultado encontrado</div>';
+      }
+    });
+
+    // Close overlay on click outside
+    document.addEventListener('click', (e) => {
+      if (!searchInput.contains(e.target) && !resultsOverlay.contains(e.target)) {
+        resultsOverlay.style.display = 'none';
+      }
     });
 
     // Smooth scroll for nav buttons
     document.querySelectorAll('.cat-btn').forEach(btn => {
       btn.addEventListener('click', (e) => {
+        if (btn.getAttribute('href').startsWith('http')) return;
+        const targetId = btn.getAttribute('href');
+        if (!targetId.startsWith('#')) return;
         e.preventDefault();
-        const target = document.querySelector(btn.getAttribute('href'));
+        const target = document.querySelector(targetId);
         if (target) {
           const navHeight = document.querySelector('.cat-nav').offsetHeight;
           window.scrollTo({ top: target.offsetTop - navHeight - 10, behavior: 'smooth' });
@@ -752,5 +805,16 @@ const html = `<!DOCTYPE html>
 </html>`;
 
 fs.writeFileSync(path.join(__dirname, 'index.html'), html);
-console.log('\\nLanding page generated: index.html');
+console.log('\nLanding page generated: index.html');
 console.log(`Total size: ${(Buffer.byteLength(html) / 1024).toFixed(0)} KB`);
+
+// Export search index for items
+const searchIndex = products.map(p => ({
+  title: p.title,
+  slug: p.slug,
+  type: 'product',
+  category: categorize(p.slug),
+  price: p.price,
+  url: `produtos/${p.slug}.html`
+}));
+fs.writeFileSync(path.join(__dirname, 'search-index-products.json'), JSON.stringify(searchIndex));

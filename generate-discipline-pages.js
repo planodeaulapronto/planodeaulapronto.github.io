@@ -262,7 +262,7 @@ function generatePage(page, matchedProducts, allPages) {
             <p class="card-desc">${desc}${desc.length >= 120 ? '...' : ''}</p>
             <div class="card-footer">
               ${price ? `<span class="card-price">${price}</span>` : ''}
-              <a href="../products/${p.slug}.html" class="buy-btn">Ver Produto →</a>
+              <a href="../produtos/${p.slug}.html" class="buy-btn">Ver Produto →</a>
             </div>
           </div>
         </div>`;
@@ -280,7 +280,7 @@ function generatePage(page, matchedProducts, allPages) {
             "@type": "Product",
             "name": "${p.title.replace(/"/g, '\\"')}",
             "description": "${(p.description || '').replace(/"/g, '\\"').substring(0, 200)}",
-            "url": "${BASE_URL}/products/${p.slug}.html",
+            "url": "${BASE_URL}/produtos/${p.slug}.html",
             "image": "${BASE_URL}/${p.localImage || 'images/' + p.slug + '.webp'}"${p.price ? `,
             "offers": {
               "@type": "Offer",

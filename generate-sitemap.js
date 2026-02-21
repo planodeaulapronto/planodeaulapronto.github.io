@@ -35,14 +35,30 @@ disciplinePages.forEach(file => {
 products.forEach(p => {
   xml += `
   <url>
-    <loc>${BASE_URL}/products/${p.slug}.html</loc>
+    <loc>${BASE_URL}/produtos/${p.slug}.html</loc>
     <lastmod>${today}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>`;
 });
 
+// Articles (priority 0.7)
+const artigosDir = path.join(__dirname, 'artigos');
+const artigosPages = fs.existsSync(artigosDir)
+  ? fs.readdirSync(artigosDir).filter(f => f.endsWith('.html'))
+  : [];
+
+artigosPages.forEach(file => {
+  xml += `
+  <url>
+    <loc>${BASE_URL}/artigos/${file}</loc>
+    <lastmod>${today}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>`;
+});
+
 xml += `\n</urlset>`;
 
 fs.writeFileSync(path.join(__dirname, 'sitemap.xml'), xml);
-console.log(`sitemap.xml created: 1 home + ${disciplinePages.length} discipline + ${products.length} products = ${1 + disciplinePages.length + products.length} URLs`);
+console.log(`sitemap.xml created: 1 home + ${disciplinePages.length} discipline + ${products.length} products + ${artigosPages.length} articles = ${1 + disciplinePages.length + products.length + artigosPages.length} URLs`);

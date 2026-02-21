@@ -67,11 +67,26 @@ function generateArticleHtml(article) {
     .replace(/^### (.*)/gm, '<h3>$1</h3>')
     .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
     .replace(/\n\n/g, '</p><p>')
+    .replace(/(<\/p>|<br>)\s*\n/g, '$1')
     .replace(/\n/g, '<br>');
 
   if (!htmlBody.startsWith('<h')) htmlBody = '<p>' + htmlBody;
+  if (!htmlBody.endsWith('>')) htmlBody += '</p>';
 
-  // Pick 3 random related products
+  const backlinkUrl = 'https://diariodaeducacao.com.br/';
+  const keyword = /plano de aula pronto/gi;
+
+  if (!htmlBody.includes(backlinkUrl)) {
+    let replaced = false;
+    htmlBody = htmlBody.replace(keyword, (match) => {
+      if (!replaced) {
+        replaced = true;
+        return `<a href="${backlinkUrl}" rel="dofollow">${match}</a>`;
+      }
+      return match;
+    });
+  }
+
   const related = products.sort(() => 0.5 - Math.random()).slice(0, 3);
   const relatedHtml = related.map(p => `
     <div class="product-mini-card">
@@ -105,7 +120,10 @@ function generateArticleHtml(article) {
 <body>
   <nav class="nav-bar">
     <a href="../index.html" class="logo">📚 Materiais BNCC</a>
-    <a href="index.html" style="font-weight: 600; color: var(--text); text-decoration: none;">📰 Artigos</a>
+    <div style="display:flex; gap:15px;">
+        <a href="../index.html" style="font-weight: 600; color: var(--text); text-decoration: none;">Início</a>
+        <a href="index.html" style="font-weight: 600; color: var(--text); text-decoration: none;">📰 Artigos</a>
+    </div>
   </nav>
   <div class="container">
     <main class="content-area">${htmlBody}</main>
@@ -140,49 +158,83 @@ const indexHtml = `<!DOCTYPE html>
   <style>
     body { font-family: sans-serif; background: #f8fafc; margin: 0; }
     header { background: #1a1a2e; color: white; padding: 60px 20px; text-align: center; }
+    .nav-top { background: #fff; padding: 10px 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); display: flex; justify-content: space-between; }
     .search-box { max-width: 600px; margin: 20px auto; }
     .search-box input { width: 100%; padding: 15px; border-radius: 30px; border: none; }
     .grid { max-width: 1200px; margin: 40px auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; padding: 0 20px; }
     .card { background: white; padding: 25px; border-radius: 16px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+    .pagination { text-align: center; padding: 40px; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+    .page-btn { padding: 8px 15px; background: white; border: 1px solid #ddd; border-radius: 5px; cursor: pointer; text-decoration: none; color: #333; }
+    .page-btn.active { background: #4F46E5; color: white; border-color: #4F46E5; }
   </style>
 </head>
 <body>
+  <nav class="nav-top">
+    <a href="../index.html" style="font-weight: 800; color: #4F46E5; text-decoration: none;">📚 Voltar ao Início</a>
+    <span>📰 Artigos e Dicas</span>
+  </nav>
   <header>
     <h1>Blog Pedagógico 📰</h1>
     <div class="search-box">
       <input type="text" id="blogSearch" placeholder="Buscar artigos e produtos...">
     </div>
   </header>
-  <div class="grid" id="blogGrid">
-    ${articles.map(a => `
-      <div class="card">
-        <small>${a.category}</small>
-        <h3>${a.title}</h3>
-        <a href="${a.slug}.html">Ler mais</a>
-      </div>
-    `).join('')}
-  </div>
+  <div class="grid" id="blogGrid"></div>
+  <div class="pagination" id="pagination"></div>
+
   <script>
-    const searchInput = document.getElementById('blogSearch');
+    const articles = ${JSON.stringify(articles.map(a => ({ title: a.title, category: a.category, slug: a.slug })))};
+    const itemsPerPage = 20;
+    let currentPage = 1;
+    let filteredArticles = articles;
+
     const blogGrid = document.getElementById('blogGrid');
-    let searchIndex = [];
-    async function load() {
-      const artData = ${JSON.stringify(articleIndex)};
-      const prodRes = await fetch('../search-index-products.json');
-      const prodData = await prodRes.json();
-      searchIndex = [...artData, ...prodData.map(p => ({ ...p, url: '../' + p.url }))];
+    const pagination = document.getElementById('pagination');
+    const searchInput = document.getElementById('blogSearch');
+
+    function render() {
+      blogGrid.innerHTML = '';
+      const start = (currentPage - 1) * itemsPerPage;
+      const end = start + itemsPerPage;
+      const pageItems = filteredArticles.slice(start, end);
+
+      blogGrid.innerHTML = pageItems.map(a => \`
+        <div class="card">
+          <small>\${a.category}</small>
+          <h3>\${a.title}h3>
+          <a href="\${a.slug}.html">Ler mais</a>
+        </div>
+      \`).join('');
+
+      renderPagination();
     }
-    load();
-    const resultsOverlay = document.createElement('div');
-    resultsOverlay.style.cssText = 'display:none; position:absolute; background:white; width:100%; box-shadow:0 10px 20px rgba(0,0,0,0.1); z-index:100;';
-    searchInput.parentElement.appendChild(resultsOverlay);
+
+    function renderPagination() {
+      const pageCount = Math.ceil(filteredArticles.length / itemsPerPage);
+      pagination.innerHTML = '';
+      if (pageCount <= 1) return;
+
+      for (let i = 1; i <= pageCount; i++) {
+        const btn = document.createElement('button');
+        btn.innerText = i;
+        btn.className = 'page-btn' + (i === currentPage ? ' active' : '');
+        btn.addEventListener('click', () => {
+          currentPage = i;
+          render();
+          window.scrollTo(0, 0);
+        });
+        pagination.appendChild(btn);
+      }
+    }
+
     searchInput.addEventListener('input', () => {
       const q = searchInput.value.toLowerCase();
-      if (!q) { resultsOverlay.style.display='none'; return; }
-      const matches = searchIndex.filter(i => i.title.toLowerCase().includes(q)).slice(0, 10);
-      resultsOverlay.style.display = 'block';
-      resultsOverlay.innerHTML = matches.map(i => '<a href="'+i.url+'" style="display:block;padding:10px;text-decoration:none;color:black;">'+i.title+'</a>').join('');
+      filteredArticles = articles.filter(a => a.title.toLowerCase().includes(q));
+      currentPage = 1;
+      render();
     });
+
+    render();
   </script>
 </body>
 </html>`;

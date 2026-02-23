@@ -303,8 +303,9 @@ function generateProductPage(product, relatedProducts) {
   const imgSrc = `../images/${(product.localImage || `images/${product.slug}.webp`).replace('images/', '')}`;
   const imgAbsolute = `${BASE_URL}/${product.localImage || 'images/' + product.slug + '.webp'}`;
 
-  // Site Oficial link for SEO Authority
-  const buyLink = product.link || product.hotmartLink || '';
+  // Hotmart link for Affiliate Revenue - Forced NoFollow
+  const buyLinkRaw = product.hotmartLink || product.link || '';
+  const buyLink = buyLinkRaw.includes('?') ? `${buyLinkRaw.split('?')[0]}?src=github` : `${buyLinkRaw}?src=github`;
 
   const price = product.price ? `R$ ${product.price}` : '';
   const title = product.title.replace(/"/g, '&quot;').replace(/</g, '&lt;');
@@ -496,8 +497,8 @@ function generateProductPage(product, relatedProducts) {
         
         <div class="buy-section-top">
           ${price ? `<div class="product-price">${price}</div>` : ''}
-          <a href="${buyLink}" target="_blank" rel="dofollow" class="buy-btn-large">
-            Ver Material no Site Oficial &rarr;
+          <a href="${buyLink}" target="_blank" rel="nofollow" class="buy-btn-large">
+            Acessar Material Completo &rarr;
           </a>
         </div>
         

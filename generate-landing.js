@@ -114,11 +114,13 @@ function generateCards(prods) {
                   ${discount ? `<span class="discount-badge">${discount}</span>` : ''}
                 </div>
                 <div class="card-body">
-                  <h3 class="card-title">${title}</h3>
+                  <a href="produtos/${p.slug}.html" rel="dofollow" style="text-decoration: none; color: inherit;">
+                    <h3 class="card-title">${title}</h3>
+                  </a>
                   <p class="card-desc">${desc}${desc.length >= 120 ? '...' : ''}</p>
                   <div class="card-footer">
                     ${price ? `<span class="card-price">${price}</span>` : ''}
-                    <a href="produtos/${p.slug}.html" rel="dofollow" class="buy-btn">Ver Material →</a>
+                    <a href="${buyLink}" target="_blank" rel="nofollow" class="buy-btn">Acessar Produto →</a>
                   </div>
                 </div>
               </div>`;

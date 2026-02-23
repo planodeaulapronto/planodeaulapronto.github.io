@@ -64,7 +64,9 @@ function generateArticleHtml(article) {
   let htmlBody = article.content
     .replace(/^# (.*)/gm, '<h1>$1</h1>')
     .replace(/^## (.*)/gm, '<h2>$1</h2>')
-    .replace(/^### (.*)/gm, '<h3>$1</h3>');
+    .replace(/^### (.*)/gm, '<h3>$1</h3>')
+    .replace(/https:\/\/diariodaeducacao\.com\.br\//g, 'https://planodeaulapronto.github.io/')
+    .replace(/rel="dofollow"/g, 'rel="nofollow"');
 
   // Format Metadata Block (Theme, Audience, BNCC)
   const metadataRegex = /-\s*\*\*(Tema|Público-alvo|Códigos BNCC)\*\*:(.*)/gi;
@@ -89,13 +91,13 @@ function generateArticleHtml(article) {
     <div class="cta-highlight">
         <div style="font-size: 1.5rem; margin-bottom: 15px;">🚀 <strong>PACOTE COMPLETO ALINHADO À BNCC 2026</strong></div>
         <p style="font-size: 1.2rem; line-height: 1.5; margin-bottom: 25px;">
-            Para pacotes e kits completos de <strong>planos de aula e atividades</strong> (PDF e DOCX), visite o 
-            <span style="color: #FFD700; font-size: 1.3rem;">★</span> <strong>Diário da Educação</strong>.
+            Para pacotes e kits completos de <strong>planos de aula e atividades</strong> (PDF e DOCX), visite nossa 
+            <span style="color: #FFD700; font-size: 1.3rem;">★</span> <strong>Página de Materiais Completos</strong>.
         </p>
         <div style="font-size: 1rem; margin-bottom: 20px; opacity: 0.9;">
             Inclui: Planos de Aula, Atividades, Avaliações, Slides e Gabaritos Editáveis.
         </div>
-        <a href="https://diariodaeducacao.com.br/" rel="dofollow" class="cta-button">ACESSAR PACOTES COMPLETOS AGORA →</a>
+        <a href="https://planodeaulapronto.github.io/" rel="nofollow" class="cta-button">ACESSAR TODOS OS MATERIAIS AGORA →</a>
     </div>
   `;
 
@@ -104,7 +106,7 @@ function generateArticleHtml(article) {
   if (!htmlBody.startsWith('<h')) htmlBody = '<p>' + htmlBody;
   if (!htmlBody.endsWith('>')) htmlBody += '</p>';
 
-  const backlinkUrl = 'https://diariodaeducacao.com.br/';
+  const backlinkUrl = 'https://planodeaulapronto.github.io/';
   const keywords = [
     /plano de aula pronto/gi,
     /planos de aula prontos/gi,
@@ -117,21 +119,29 @@ function generateArticleHtml(article) {
       if (htmlBody.includes(`>${match}</a>`) || htmlBody.includes(`href="${backlinkUrl}"`)) {
         return match;
       }
-      return `<a href="${backlinkUrl}" rel="dofollow">${match}</a>`;
+      return `<a href="${backlinkUrl}" rel="nofollow">${match}</a>`;
     });
   });
 
   // Pick 15 random related products
   const related = products.sort(() => 0.5 - Math.random()).slice(0, 15);
-  const relatedHtml = related.map(p => `
+  const relatedHtml = related.map(p => {
+    const buyLinkRaw = p.hotmartLink || p.link || '';
+    const hLink = buyLinkRaw.includes('?') ? `${buyLinkRaw.split('?')[0]}?src=github` : `${buyLinkRaw}?src=github`;
+    return `
     <div class="product-mini-card">
-        <img src="../images/${(p.localImage || 'images/' + p.slug + '.webp').replace('images/', '')}" alt="${p.title.replace(/"/g, '&quot;')}" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2260%22 height=%2260%22><rect fill=%22%23eee%22 width=%2260%22 height=%2260%22/></svg>'">
+        <a href="../produtos/${p.slug}.html" rel="dofollow">
+          <img src="../images/${(p.localImage || 'images/' + p.slug + '.webp').replace('images/', '')}" alt="${p.title.replace(/"/g, '&quot;')}" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2260%22 height=%2260%22><rect fill=%22%23eee%22 width=%2260%22 height=%2260%22/></svg>'">
+        </a>
         <div>
-            <h4>${p.title}</h4>
-            <a href="../produtos/${p.slug}.html" rel="dofollow" class="view-btn">Ver Material →</a>
+            <a href="../produtos/${p.slug}.html" rel="dofollow" style="text-decoration: none; color: inherit;">
+              <h4>${p.title}</h4>
+            </a>
+            <a href="${hLink}" target="_blank" rel="nofollow" class="view-btn">Acessar Produto →</a>
         </div>
     </div>
-  `).join('');
+    `;
+  }).join('');
 
   return `<!DOCTYPE html>
 <html lang="pt-BR">

@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://planodeaulapronto.github.io/planejamento-educacao-infantil-2026/sitemap.xml

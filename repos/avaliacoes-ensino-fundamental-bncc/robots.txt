@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://planodeaulapronto.github.io/avaliacoes-ensino-fundamental-bncc/sitemap.xml

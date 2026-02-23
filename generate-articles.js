@@ -4,7 +4,7 @@ const path = require('path');
 const resultsFile = path.join(__dirname, 'batch_results.jsonl');
 const productsFile = path.join(__dirname, 'products.json');
 const outputDir = path.join(__dirname, 'artigos');
-const BASE_URL = 'https://planodeaulapronto.github.io/planodeaulapronto';
+const BASE_URL = 'https://planodeaulapronto.github.io';
 
 if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir, { recursive: true });
 

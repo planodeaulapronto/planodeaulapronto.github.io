@@ -154,14 +154,14 @@ const html = `<!DOCTYPE html>
   <meta name="keywords" content="planos de aula BNCC 2026, atividades BNCC, materiais pedagógicos, planejamento escolar, avaliações ensino fundamental, slides de aula, educação infantil BNCC, ensino médio BNCC, planos de aula prontos, atividades para professores, planejamento educação infantil, atividades ensino fundamental, material pedagógico editável">
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
   <meta name="author" content="Materiais Pedagógicos BNCC">
-  <link rel="canonical" href="https://planodeaulapronto.github.io/planodeaulapronto/">
+  <link rel="canonical" href="https://planodeaulapronto.github.io/">
 
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://planodeaulapronto.github.io/planodeaulapronto/">
+  <meta property="og:url" content="https://planodeaulapronto.github.io/">
   <meta property="og:title" content="Materiais Pedagógicos BNCC 2026 | ${products.length} Produtos Prontos">
   <meta property="og:description" content="Planos de aula prontos, atividades, avaliações e slides alinhados à BNCC 2026. Da Educação Infantil ao Ensino Médio. Material editável para professores.">
-  <meta property="og:image" content="${products[0] ? `https://planodeaulapronto.github.io/planodeaulapronto/${products[0].localImage || 'images/' + products[0].slug + '.webp'}` : ''}">
+  <meta property="og:image" content="${products[0] ? `https://planodeaulapronto.github.io/${products[0].localImage || 'images/' + products[0].slug + '.webp'}` : ''}">
   <meta property="og:locale" content="pt_BR">
   <meta property="og:site_name" content="Materiais Pedagógicos BNCC 2026">
 
@@ -169,7 +169,7 @@ const html = `<!DOCTYPE html>
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Materiais Pedagógicos BNCC 2026 | ${products.length} Produtos Prontos">
   <meta name="twitter:description" content="Planos de aula prontos, atividades, avaliações e slides alinhados à BNCC 2026 para todos os níveis de ensino.">
-  <meta name="twitter:image" content="${products[0] ? `https://planodeaulapronto.github.io/planodeaulapronto/${products[0].localImage || 'images/' + products[0].slug + '.webp'}` : ''}">
+  <meta name="twitter:image" content="${products[0] ? `https://planodeaulapronto.github.io/${products[0].localImage || 'images/' + products[0].slug + '.webp'}` : ''}">
 
   <!-- Schema.org JSON-LD -->
   <script type="application/ld+json">
@@ -178,15 +178,15 @@ const html = `<!DOCTYPE html>
     "@type": "CollectionPage",
     "name": "Materiais Pedagógicos BNCC 2026",
     "description": "${products.length} materiais pedagógicos alinhados à BNCC 2026. Planos de aula, atividades, avaliações e slides para professores.",
-    "url": "https://planodeaulapronto.github.io/planodeaulapronto/",
+    "url": "https://planodeaulapronto.github.io/",
     "numberOfItems": ${products.length},
     "mainEntity": {
       "@type": "ItemList",
       "numberOfItems": ${products.length},
       "itemListElement": [
         ${products.slice(0, 30).map((p, i) => {
-  const productUrl = `https://planodeaulapronto.github.io/planodeaulapronto/produtos/${p.slug}.html`;
-  const productImg = `https://planodeaulapronto.github.io/planodeaulapronto/${p.localImage || 'images/' + p.slug + '.webp'}`;
+  const productUrl = `https://planodeaulapronto.github.io/produtos/${p.slug}.html`;
+  const productImg = `https://planodeaulapronto.github.io/${p.localImage || 'images/' + p.slug + '.webp'}`;
   return `{
           "@type": "ListItem",
           "position": ${i + 1},
@@ -252,15 +252,15 @@ const html = `<!DOCTYPE html>
     "@graph": [
       {
         "@type": "WebSite",
-        "@id": "https://planodeaulapronto.github.io/planodeaulapronto/#website",
-        "url": "https://planodeaulapronto.github.io/planodeaulapronto/",
+        "@id": "https://planodeaulapronto.github.io/#website",
+        "url": "https://planodeaulapronto.github.io/",
         "name": "Materiais Pedagógicos BNCC 2026",
         "description": "Planos de aula, atividades e avaliações alinhadas à BNCC",
         "potentialAction": [{
           "@type": "SearchAction",
           "target": {
             "@type": "EntryPoint",
-            "urlTemplate": "https://planodeaulapronto.github.io/planodeaulapronto/?search={search_term_string}"
+            "urlTemplate": "https://planodeaulapronto.github.io/?search={search_term_string}"
           },
           "query-input": "required name=search_term_string"
         }],
@@ -268,12 +268,12 @@ const html = `<!DOCTYPE html>
       },
       {
         "@type": "Organization",
-        "@id": "https://planodeaulapronto.github.io/planodeaulapronto/#organization",
+        "@id": "https://planodeaulapronto.github.io/#organization",
         "name": "Diário da Educação",
-        "url": "https://planodeaulapronto.github.io/planodeaulapronto/",
+        "url": "https://planodeaulapronto.github.io/",
         "logo": {
           "@type": "ImageObject",
-          "url": "${products[0] ? `https://planodeaulapronto.github.io/planodeaulapronto/${products[0].localImage || 'images/' + products[0].slug + '.webp'}` : ''}"
+          "url": "${products[0] ? `https://planodeaulapronto.github.io/${products[0].localImage || 'images/' + products[0].slug + '.webp'}` : ''}"
         },
         "description": "Plataforma líder em materiais pedagógicos voltados para professores e instituições de ensino no Brasil, 100% alinhados à BNCC."
       }

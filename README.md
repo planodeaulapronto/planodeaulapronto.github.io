@@ -39,7 +39,7 @@ Língua Portuguesa, Matemática, Física, Química, Biologia, História, Geograf
 
 ## 🌐 Acesse o Site
 
-👉 **[Clique aqui para ver todos os materiais pedagógicos](https://planodeaulapronto.github.io/planodeaulapronto/)**
+👉 **[Clique aqui para ver todos os materiais pedagógicos](https://planodeaulapronto.github.io/)**
 
 ---
 

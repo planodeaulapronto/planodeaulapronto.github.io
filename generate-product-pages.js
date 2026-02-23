@@ -4,7 +4,7 @@ const path = require('path');
 const products = JSON.parse(fs.readFileSync(path.join(__dirname, 'products.json'), 'utf8'));
 const USERNAME = 'planodeaulapronto';
 const REPO = 'planodeaulapronto';
-const BASE_URL = `https://${USERNAME}.github.io/${REPO}`;
+const BASE_URL = `https://${USERNAME}.github.io`;
 
 console.log(`Loaded ${products.length} products`);
 

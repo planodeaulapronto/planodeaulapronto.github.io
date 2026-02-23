@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 const products = JSON.parse(fs.readFileSync(path.join(__dirname, 'products.json'), 'utf8'));
-const BASE_URL = 'https://planodeaulapronto.github.io/planodeaulapronto';
+const BASE_URL = 'https://planodeaulapronto.github.io';
 const today = new Date().toISOString().split('T')[0];
 
 // Discipline pages

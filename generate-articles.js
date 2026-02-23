@@ -63,8 +63,8 @@ lines.forEach(line => {
 function generateArticleHtml(article) {
   let htmlBody = article.content
     .replace(/^# (.*)/gm, '<h1>$1</h1>')
-    .replace(/^## (.*)/gm, '<h2>$2</h2>') // AI sometimes uses ## for H2
-    .replace(/^### (.*)/gm, '<h3>$3</h3>');
+    .replace(/^## (.*)/gm, '<h2>$1</h2>')
+    .replace(/^### (.*)/gm, '<h3>$1</h3>');
 
   // Format Metadata Block (Theme, Audience, BNCC)
   const metadataRegex = /-\s*\*\*(Tema|Público-alvo|Códigos BNCC)\*\*:(.*)/gi;

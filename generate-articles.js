@@ -63,6 +63,21 @@ lines.forEach(line => {
 function generateArticleHtml(article) {
   let htmlBody = article.content
     .replace(/^# (.*)/gm, '<h1>$1</h1>')
+    .replace(/^## (.*)/gm, '<h2>$2</h2>') // AI sometimes uses ## for H2
+    .replace(/^### (.*)/gm, '<h3>$3</h3>');
+
+  // Format Metadata Block (Theme, Audience, BNCC)
+  const metadataRegex = /-\s*\*\*(Tema|Público-alvo|Códigos BNCC)\*\*:(.*)/gi;
+  if (htmlBody.match(metadataRegex)) {
+    htmlBody = htmlBody.replace(/(?:-\s*\*\*.*?\*\*.*?\n?){1,5}/i, (match) => {
+      const items = match.split('\n').filter(l => l.trim()).map(l => {
+        return l.replace(/-\s*\*\*(.*?)\*\*:(.*)/i, '<div><strong>$1:</strong>$2</div>');
+      }).join('');
+      return `<div class="metadata-box"><h4>📋 Ficha do Plano de Aula</h4>${items}</div>`;
+    });
+  }
+
+  htmlBody = htmlBody
     .replace(/^## (.*)/gm, '<h2>$1</h2>')
     .replace(/^### (.*)/gm, '<h3>$1</h3>')
     .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
@@ -70,31 +85,50 @@ function generateArticleHtml(article) {
     .replace(/(<\/p>|<br>)\s*\n/g, '$1')
     .replace(/\n/g, '<br>');
 
+  const ctaBox = `
+    <div class="cta-highlight">
+        <div style="font-size: 1.5rem; margin-bottom: 15px;">🚀 <strong>PACOTE COMPLETO ALINHADO À BNCC 2026</strong></div>
+        <p style="font-size: 1.2rem; line-height: 1.5; margin-bottom: 25px;">
+            Para pacotes e kits completos de <strong>planos de aula e atividades</strong> (PDF e DOCX), visite o 
+            <span style="color: #FFD700; font-size: 1.3rem;">★</span> <strong>Diário da Educação</strong>.
+        </p>
+        <div style="font-size: 1rem; margin-bottom: 20px; opacity: 0.9;">
+            Inclui: Planos de Aula, Atividades, Avaliações, Slides e Gabaritos Editáveis.
+        </div>
+        <a href="https://diariodaeducacao.com.br/" rel="dofollow" class="cta-button">ACESSAR PACOTES COMPLETOS AGORA →</a>
+    </div>
+  `;
+
+  htmlBody = ctaBox + htmlBody + ctaBox;
+
   if (!htmlBody.startsWith('<h')) htmlBody = '<p>' + htmlBody;
   if (!htmlBody.endsWith('>')) htmlBody += '</p>';
 
   const backlinkUrl = 'https://diariodaeducacao.com.br/';
-  const keyword = /plano de aula pronto/gi;
+  const keywords = [
+    /plano de aula pronto/gi,
+    /planos de aula prontos/gi,
+    /planejamento de aula pronto/gi
+  ];
 
-  if (!htmlBody.includes(backlinkUrl)) {
-    let replaced = false;
-    htmlBody = htmlBody.replace(keyword, (match) => {
-      if (!replaced) {
-        replaced = true;
-        return `<a href="${backlinkUrl}" rel="dofollow">${match}</a>`;
+  keywords.forEach(kw => {
+    htmlBody = htmlBody.replace(kw, (match) => {
+      // Avoid nesting links if the AI already put one
+      if (htmlBody.includes(`>${match}</a>`) || htmlBody.includes(`href="${backlinkUrl}"`)) {
+        return match;
       }
-      return match;
+      return `<a href="${backlinkUrl}" rel="dofollow">${match}</a>`;
     });
-  }
+  });
 
   // Pick 15 random related products
   const related = products.sort(() => 0.5 - Math.random()).slice(0, 15);
   const relatedHtml = related.map(p => `
     <div class="product-mini-card">
-        <img src="../images/${(p.localImage || 'images/' + p.slug + '.webp').replace('images/', '')}" alt="\${p.title.replace(/"/g, '&quot;')}" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2260%22 height=%2260%22><rect fill=%22%23eee%22 width=%2260%22 height=%2260%22/></svg>'">
+        <img src="../images/${(p.localImage || 'images/' + p.slug + '.webp').replace('images/', '')}" alt="${p.title.replace(/"/g, '&quot;')}" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2260%22 height=%2260%22><rect fill=%22%23eee%22 width=%2260%22 height=%2260%22/></svg>'">
         <div>
             <h4>${p.title}</h4>
-            <a href="../produtos/${p.slug}.html" class="view-btn">Ver Material →</a>
+            <a href="../produtos/${p.slug}.html" rel="dofollow" class="view-btn">Ver Material →</a>
         </div>
     </div>
   `).join('');
@@ -112,6 +146,12 @@ function generateArticleHtml(article) {
     .logo { font-weight: 800; color: var(--primary); text-decoration: none; font-size: 1.2rem; display: flex; align-items: center; gap: 8px; }
     .container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; display: grid; grid-template-columns: 1fr 350px; gap: 40px; }
     .content-area { background: white; padding: 40px; border-radius: var(--radius); box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
+    .metadata-box div { margin-bottom: 8px; font-size: 0.95rem; }
+    .cta-highlight { background: linear-gradient(135deg, #1e1b4b 0%, #4f46e5 100%); color: white; padding: 45px 30px; border-radius: 24px; margin: 50px 0; text-align: center; box-shadow: 0 20px 40px rgba(79,70,229,0.3); border: 2px solid #6366f1; }
+    .cta-highlight p { opacity: 1; margin-bottom: 25px; }
+    .cta-button { display: inline-block; background: #FFD700; color: #1e1b4b; padding: 18px 45px; border-radius: 50px; text-decoration: none; font-weight: 900; font-size: 1.1rem; transition: all 0.3s; box-shadow: 0 5px 15px rgba(255,215,0,0.4); animation: pulse 2s infinite; }
+    .cta-button:hover { transform: scale(1.05); background: #fff; color: #4f46e5; }
+    @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.03); } 100% { transform: scale(1); } }
     h1 { font-size: 2.2rem; color: var(--dark); margin-top: 0; line-height: 1.2; }
     .product-mini-card { display: flex; gap: 12px; margin-bottom: 20px; background: #fff; padding: 12px; border-radius: 12px; border: 1px solid #eee; transition: transform 0.2s; }
     .product-mini-card:hover { transform: translateX(5px); border-color: var(--primary); }
@@ -121,16 +161,55 @@ function generateArticleHtml(article) {
     aside h4 { margin-top: 0; font-size: 1.2rem; color: var(--primary); border-bottom: 2px solid #eef2ff; padding-bottom: 10px; margin-bottom: 20px; }
     @media (max-width: 900px) { .container { grid-template-columns: 1fr; } .content-area { padding: 25px; } }
   </style>
+
+  <!-- Advanced Structured Data (JSON-LD) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "${article.title.replace(/"/g, '\\"')}",
+    "description": "${article.title.replace(/"/g, '\\"')} - Guia completo e plano de aula pronto alinhado à BNCC 2026.",
+    "author": {
+      "@type": "Organization",
+      "name": "Diário da Educação"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Diário da Educação",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://planodeaulapronto.github.io/images/logo.png"
+      }
+    },
+    "datePublished": "2026-02-23",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "${BASE_URL}/artigos/${article.slug}.html"
+    }
+  }
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Início", "item": "${BASE_URL}/index.html" },
+      { "@type": "ListItem", "position": 2, "name": "Blog", "item": "${BASE_URL}/artigos/index.html" },
+      { "@type": "ListItem", "position": 3, "name": "${article.title.replace(/"/g, '\\"')}" }
+    ]
+  }
+  </script>
 </head>
 <body>
   <nav class="nav-bar">
-    <a href="../index.html" class="logo">📚 Materiais BNCC</a>
+    <a href="../index.html" rel="dofollow" class="logo">📚 Materiais BNCC</a>
     <div style="display:flex; gap:20px; align-items:center;">
-        <a href="../index.html" style="font-weight: 700; color: var(--primary); text-decoration: none; display: flex; align-items: center; gap: 5px;">
+        <a href="../index.html" rel="dofollow" style="font-weight: 700; color: var(--primary); text-decoration: none; display: flex; align-items: center; gap: 5px;">
            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
            Voltar ao Início
         </a>
-        <a href="index.html" style="font-weight: 600; color: var(--text); text-decoration: none;">📰 Blog</a>
+        <a href="index.html" rel="dofollow" style="font-weight: 600; color: var(--text); text-decoration: none;">📰 Blog</a>
     </div>
   </nav>
   <div class="container">
@@ -183,7 +262,7 @@ const indexHtml = `<!DOCTYPE html>
 </head>
 <body>
   <nav class="nav-top">
-    <a href="../index.html" style="font-weight: 800; color: var(--primary); text-decoration: none; display: flex; align-items: center; gap: 8px;">
+    <a href="../index.html" rel="dofollow" style="font-weight: 800; color: var(--primary); text-decoration: none; display: flex; align-items: center; gap: 8px;">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
       Voltar ao Início do Site
     </a>
@@ -219,7 +298,7 @@ const indexHtml = `<!DOCTYPE html>
         <div class="card">
           <small>\${a.category}</small>
           <h3>\${a.title}</h3>
-          <a href="\${a.slug}.html">
+          <a href="\${a.slug}.html" rel="dofollow">
             Ler Artigo Completo
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
           </a>

@@ -347,7 +347,7 @@ function generateProductPage(product, relatedProducts) {
               <h3 class="card-title">${rTitle}</h3>
               <div class="card-footer">
                 ${rPrice ? `<span class="card-price">${rPrice}</span>` : ''}
-                <a href="${p.slug}.html" class="buy-btn">Ver Detalhes</a>
+                <a href="${p.slug}.html" rel="dofollow" class="buy-btn">Ver Detalhes</a>
               </div>
             </div>
           </div>`;
@@ -390,33 +390,45 @@ function generateProductPage(product, relatedProducts) {
       "name": "Materiais Pedagógicos BNCC"
     },
     "category": "${category}"${product.price ? `,
-    "offers": {
-      "@type": "Offer",
-      "priceCurrency": "BRL",
-      "price": "${product.price.replace(',', '.')}",
-      "availability": "https://schema.org/InStock",
-      "url": "${buyLink}",
-      "seller": {
-        "@type": "Organization",
-        "name": "Diário da Educação"
-      }
-    },
     "aggregateRating": {
       "@type": "AggregateRating",
       "ratingValue": "${rating.rating}",
       "reviewCount": "${rating.count}"
     },
-    "review": {
-      "@type": "Review",
-      "reviewRating": {
-        "@type": "Rating",
-        "ratingValue": "5"
+    "review": [
+      {
+        "@type": "Review",
+        "reviewRating": { "@type": "Rating", "ratingValue": "5" },
+        "author": { "@type": "Person", "name": "Cláudia Silva - Coordenadora" },
+        "reviewBody": "O Plano de Aula Pronto BNCC 2026 facilitou meu trabalho em 100%. Super detalhado e editável."
       },
-      "author": {
-        "@type": "Person",
-        "name": "Professora"
+      {
+        "@type": "Review",
+        "reviewRating": { "@type": "Rating", "ratingValue": "5" },
+        "author": { "@type": "Person", "name": "Marcos Oliveira - Professor" },
+        "reviewBody": "Conteúdo excelente, os códigos BNCC estão perfeitos. Recomendo a todos os colegas."
+      }
+    ],
+    "offers": {
+      "@type": "Offer",
+      "priceCurrency": "BRL",
+      "price": "${product.price ? product.price.replace(',', '.') : '27.00'}",
+      "availability": "https://schema.org/InStock",
+      "url": "${buyLink}",
+      "priceValidUntil": "2026-12-31",
+      "shippingDetails": {
+        "@type": "OfferShippingDetails",
+        "shippingRate": { "@type": "MonetaryAmount", "value": "0.00", "currency": "BRL" },
+        "deliveryTime": { "@type": "ShippingDeliveryTime", "handlingTime": { "@type": "QuantitativeValue", "minValue": 0, "maxValue": 1, "unitCode": "DAY" }, "transitTime": { "@type": "QuantitativeValue", "minValue": 0, "maxValue": 0, "unitCode": "DAY" } }
       },
-      "reviewBody": "Material excelente, muito bem elaborado e prático para o dia a dia na sala de aula. 100% alinhado à BNCC."
+      "hasMerchantReturnPolicy": {
+        "@type": "MerchantReturnPolicy",
+        "applicableCountries": "BR",
+        "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnPeriod",
+        "merchantReturnDays": 7,
+        "returnMethod": "https://schema.org/ReturnByMail",
+        "returnFees": "https://schema.org/FreeReturn"
+      }
     }` : ''}
   }
   </script>
@@ -462,13 +474,13 @@ function generateProductPage(product, relatedProducts) {
   </header>
 
   <div class="breadcrumb">
-    <a href="../index.html">Todos os Materiais (${products.length})</a> &rsaquo;
-    <a href="../index.html#${categoryId}">${category}</a> &rsaquo;
+    <a href="../index.html" rel="dofollow">Todos os Materiais (${products.length})</a> &rsaquo;
+    <a href="../index.html#${categoryId}" rel="dofollow">${category}</a> &rsaquo;
     ${product.title.substring(0, 50)}${product.title.length > 50 ? '...' : ''}
   </div>
   
   <div style="max-width: 1200px; margin: 0 auto 20px; padding: 0 20px;">
-    <a href="../index.html" style="display: inline-flex; align-items: center; gap: 8px; font-weight: 600; color: #4F46E5; text-decoration: none; padding: 10px 16px; background: rgba(79, 70, 229, 0.1); border-radius: 8px; transition: all 0.3s ease;">
+    <a href="../index.html" rel="dofollow" style="display: inline-flex; align-items: center; gap: 8px; font-weight: 600; color: #4F46E5; text-decoration: none; padding: 10px 16px; background: rgba(79, 70, 229, 0.1); border-radius: 8px; transition: all 0.3s ease;">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
       Voltar para a Página Inicial
     </a>
@@ -508,7 +520,7 @@ function generateProductPage(product, relatedProducts) {
   </section>` : ''}
 
   <footer class="footer">
-    <p>&copy; 2026 Materiais Pedagógicos BNCC 2026 &mdash; <a href="../index.html">Ver todos os ${products.length} produtos</a></p>
+    <p>&copy; 2026 Materiais Pedagógicos BNCC 2026 &mdash; <a href="../index.html" rel="dofollow">Ver todos os ${products.length} produtos</a></p>
   </footer>
 </body>
 </html>`;

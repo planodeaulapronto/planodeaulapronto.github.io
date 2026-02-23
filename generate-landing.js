@@ -72,7 +72,7 @@ function generateCatNav() {
     const colors = catColors[cat];
     const icon = catIcons[cat];
     const id = cat.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '-').toLowerCase();
-    return `<a href="#${id}" class="cat-btn" style="background: ${colors.gradient}">
+    return `<a href="#${id}" rel="dofollow" class="cat-btn" style="background: ${colors.gradient}">
               <span class="cat-icon">${icon}</span>
               <span class="cat-name">${cat}</span>
               <span class="cat-count">${categories[cat].length}</span>
@@ -80,7 +80,7 @@ function generateCatNav() {
   }).join('\n            ');
 
   return categoriesHtml + `
-            <a href="artigos/index.html" class="cat-btn" style="background: linear-gradient(135deg, #4F46E5, #3730A3)">
+            <a href="artigos/index.html" rel="dofollow" class="cat-btn" style="background: linear-gradient(135deg, #4F46E5, #3730A3)">
               <span class="cat-icon">📰</span>
               <span class="cat-name">Artigos e Dicas</span>
             </a>`;
@@ -118,7 +118,7 @@ function generateCards(prods) {
                   <p class="card-desc">${desc}${desc.length >= 120 ? '...' : ''}</p>
                   <div class="card-footer">
                     ${price ? `<span class="card-price">${price}</span>` : ''}
-                    <a href="produtos/${p.slug}.html" class="buy-btn">Ver Produto →</a>
+                    <a href="produtos/${p.slug}.html" rel="dofollow" class="buy-btn">Ver Material →</a>
                   </div>
                 </div>
               </div>`;
@@ -149,9 +149,9 @@ const html = `<!DOCTYPE html>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Materiais Pedagógicos BNCC 2026 | Planos de Aula, Atividades e Avaliações Prontos</title>
-  <meta name="description" content="✅ ${products.length} materiais pedagógicos alinhados à BNCC 2026. Planos de aula prontos, atividades, avaliações e slides da Educação Infantil ao Ensino Médio. Material editável e completo para professores.">
-  <meta name="keywords" content="planos de aula BNCC 2026, atividades BNCC, materiais pedagógicos, planejamento escolar, avaliações ensino fundamental, slides de aula, educação infantil BNCC, ensino médio BNCC, planos de aula prontos, atividades para professores, planejamento educação infantil, atividades ensino fundamental, material pedagógico editável">
+  <title>Plano de Aula Pronto BNCC 2026 - Baixar em Word e PDF Editável</title>
+  <meta name="description" content="Plano de Aula Pronto BNCC 2026. Baixe plano de aula diário, semanal, bimestral e anual, editável em Word e PDF para imprimir. Materiais completos de acordo com a BNCC para todos os anos.">
+  <meta name="keywords" content="plano de aula pronto bncc 2026, baixar plano de aula bncc, plano de aula word pdf, planejamento escolar bncc, atividades pedagógicas prontas, plano de aula diário semanal anual">
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
   <meta name="author" content="Materiais Pedagógicos BNCC">
   <link rel="canonical" href="https://planodeaulapronto.github.io/">
@@ -159,8 +159,8 @@ const html = `<!DOCTYPE html>
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://planodeaulapronto.github.io/">
-  <meta property="og:title" content="Materiais Pedagógicos BNCC 2026 | ${products.length} Produtos Prontos">
-  <meta property="og:description" content="Planos de aula prontos, atividades, avaliações e slides alinhados à BNCC 2026. Da Educação Infantil ao Ensino Médio. Material editável para professores.">
+  <meta property="og:title" content="Plano de Aula Pronto BNCC 2026 - Materiais em Word e PDF">
+  <meta property="og:description" content="Baixe seu Plano de Aula Pronto BNCC 2026. Materiais editáveis, diários, semanais e anuais para professores.">
   <meta property="og:image" content="${products[0] ? `https://planodeaulapronto.github.io/${products[0].localImage || 'images/' + products[0].slug + '.webp'}` : ''}">
   <meta property="og:locale" content="pt_BR">
   <meta property="og:site_name" content="Materiais Pedagógicos BNCC 2026">
@@ -176,8 +176,8 @@ const html = `<!DOCTYPE html>
   {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
-    "name": "Materiais Pedagógicos BNCC 2026",
-    "description": "${products.length} materiais pedagógicos alinhados à BNCC 2026. Planos de aula, atividades, avaliações e slides para professores.",
+    "name": "Plano de Aula Pronto BNCC 2026",
+    "description": "Baixe agora Plano de Aula Pronto BNCC 2026. Planos de aula diários, semanais, bimestrais e anuais editáveis em Word e PDF. Tudo de acordo com a BNCC.",
     "url": "https://planodeaulapronto.github.io/",
     "numberOfItems": ${products.length},
     "mainEntity": {
@@ -218,28 +218,35 @@ const html = `<!DOCTYPE html>
     "mainEntity": [
       {
         "@type": "Question",
-        "name": "O que são materiais pedagógicos BNCC 2026?",
+        "name": "Onde encontrar Plano de Aula Pronto BNCC 2026?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "São planos de aula, atividades, avaliações e slides totalmente alinhados à Base Nacional Comum Curricular (BNCC) atualizada para 2026. Incluem materiais editáveis para Educação Infantil, Ensino Fundamental e Ensino Médio."
+          "text": "Você encontra os melhores Planos de Aula Prontos BNCC 2026 aqui no Materiais Pedagógicos BNCC. Oferecemos pacotes completos e editáveis em Word e PDF para Educação Infantil, Ensino Fundamental e Médio."
         }
       },
       {
         "@type": "Question",
-        "name": "Os materiais são editáveis?",
+        "name": "O Plano de Aula Pronto BNCC 2026 é editável?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Sim! Todos os ${products.length} materiais são editáveis em Word ou PowerPoint, permitindo que o professor personalize de acordo com a realidade da sua turma."
+          "text": "Sim! Todos os nossos planos de aula são 100% editáveis em Word (DOCX). Você pode adaptar as atividades, avaliações e slides para a realidade da sua escola e turma."
         }
       },
       {
         "@type": "Question",
-        "name": "Para quais séries e disciplinas os materiais estão disponíveis?",
+        "name": "Como baixar o material após a compra?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Os materiais cobrem desde o Berçário até o Ensino Médio, incluindo todas as disciplinas: Português, Matemática, Ciências, História, Geografia, Arte, Educação Física, Inglês, Ensino Religioso, Filosofia, Sociologia, Física, Química e Biologia."
+          "text": "Após a confirmação do pagamento, você recebe os links para download imediato em seu e-mail. O acesso é vitalício e você pode imprimir quando quiser."
         }
-      }
+      },
+      {
+        "@type": "Question",
+        "name": "Os materiais servem para quais anos escolares?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Temos materiais para Berçário, Maternal, Pré-Escola, Fundamental 1 (1º ao 5º ano), Fundamental 2 (6º ao 9º ano) e Ensino Médio completo, além de Educação Especial e EJA."
+        }
       }
     ]
   }
@@ -664,9 +671,9 @@ const html = `<!DOCTYPE html>
   <!-- HERO -->
   <header class="hero">
     <div class="hero-content">
-      <div class="hero-badge">✨ Material Pedagógico Completo BNCC 2026</div>
-      <h1>Tudo o que Você Precisa para <span>Transformar suas Aulas</span></h1>
-      <p>Planos de aula, atividades, avaliações e slides prontos e alinhados à BNCC 2026. Da Educação Infantil ao Ensino Médio.</p>
+      <div class="hero-badge">📚 Materiais Atualizados 2026</div>
+      <h1>Plano de Aula Pronto <span>BNCC 2026</span></h1>
+      <p>Baixe plano de aula diário, semanal, bimestral e anual, editável em Word e PDF para imprimir. Materiais 100% de acordo com a BNCC para todos os anos.</p>
       <div class="hero-stats">
         <div class="stat">
           <div class="stat-number">${products.length}</div>
@@ -777,7 +784,7 @@ const html = `<!DOCTYPE html>
         resultsOverlay.style.display = 'block';
         resultsOverlay.innerHTML = matches.map(item => {
             let priceTag = item.price ? '<span style="font-weight: 800; color: #16a34a; font-size: 0.85rem">R$ ' + item.price + '</span>' : '';
-            return '<a href="' + item.url + '" style="display: flex; align-items: center; gap: 10px; padding: 12px; text-decoration: none; border-bottom: 1px solid #f1f5f9; transition: background 0.2s;">' +
+            return '<a href="' + item.url + '" rel="dofollow" style="display: flex; align-items: center; gap: 10px; padding: 12px; text-decoration: none; border-bottom: 1px solid #f1f5f9; transition: background 0.2s;">' +
                    '<span style="font-size: 1.2rem">' + (item.type === 'article' ? '📰' : '📦') + '</span>' +
                    '<div style="flex: 1">' +
                    '  <div style="font-weight: 700; color: #1a1a2e; font-size: 0.9rem">' + item.title + '</div>' +

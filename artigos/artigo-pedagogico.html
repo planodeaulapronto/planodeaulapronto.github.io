@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Artigo Pedagógico | Blog Pedagógico</title>
+  <style>
+    :root { --primary: #4F46E5; --dark: #1a1a2e; --text: #2d3748; --radius: 16px; }
+    body { font-family: sans-serif; color: var(--text); background: #f8fafc; margin: 0; line-height: 1.6; }
+    .nav-bar { background: white; padding: 15px 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
+    .logo { font-weight: 800; color: var(--primary); text-decoration: none; font-size: 1.2rem; display: flex; align-items: center; gap: 8px; }
+    .container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; display: grid; grid-template-columns: 1fr 350px; gap: 40px; }
+    .content-area { background: white; padding: 40px; border-radius: var(--radius); box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
+    .metadata-box div { margin-bottom: 8px; font-size: 0.95rem; }
+    .cta-highlight { background: linear-gradient(135deg, #1e1b4b 0%, #4f46e5 100%); color: white; padding: 45px 30px; border-radius: 24px; margin: 50px 0; text-align: center; box-shadow: 0 20px 40px rgba(79,70,229,0.3); border: 2px solid #6366f1; }
+    .cta-highlight p { opacity: 1; margin-bottom: 25px; }
+    .cta-button { display: inline-block; background: #FFD700; color: #1e1b4b; padding: 18px 45px; border-radius: 50px; text-decoration: none; font-weight: 900; font-size: 1.1rem; transition: all 0.3s; box-shadow: 0 5px 15px rgba(255,215,0,0.4); animation: pulse 2s infinite; }
+    .cta-button:hover { transform: scale(1.05); background: #fff; color: #4f46e5; }
+    @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.03); } 100% { transform: scale(1); } }
+    h1 { font-size: 2.2rem; color: var(--dark); margin-top: 0; line-height: 1.2; }
+    .product-mini-card { display: flex; gap: 12px; margin-bottom: 20px; background: #fff; padding: 12px; border-radius: 12px; border: 1px solid #eee; transition: transform 0.2s; }
+    .product-mini-card:hover { transform: translateX(5px); border-color: var(--primary); }
+    .product-mini-card img { width: 70px; height: 70px; border-radius: 8px; object-fit: cover; }
+    .product-mini-card h4 { font-size: 0.85rem; margin: 0 0 5px 0; color: var(--dark); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .view-btn { font-size: 0.75rem; color: var(--primary); font-weight: 700; text-decoration: none; }
+    aside h4 { margin-top: 0; font-size: 1.2rem; color: var(--primary); border-bottom: 2px solid #eef2ff; padding-bottom: 10px; margin-bottom: 20px; }
+    @media (max-width: 900px) { .container { grid-template-columns: 1fr; } .content-area { padding: 25px; } }
+  </style>
+
+  <!-- Advanced Structured Data (JSON-LD) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "Artigo Pedagógico",
+    "description": "Artigo Pedagógico - Guia completo e plano de aula pronto alinhado à BNCC 2026.",
+    "author": {
+      "@type": "Organization",
+      "name": "Diário da Educação"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Diário da Educação",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://planodeaulapronto.github.io/images/logo.png"
+      }
+    },
+    "datePublished": "2026-02-23",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://planodeaulapronto.github.io/artigos/artigo-pedagogico.html"
+    }
+  }
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Início", "item": "https://planodeaulapronto.github.io/index.html" },
+      { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://planodeaulapronto.github.io/artigos/index.html" },
+      { "@type": "ListItem", "position": 3, "name": "Artigo Pedagógico" }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <nav class="nav-bar">
+    <a href="../index.html" rel="dofollow" class="logo">📚 Materiais BNCC</a>
+    <div style="display:flex; gap:20px; align-items:center;">
+        <a href="../index.html" rel="dofollow" style="font-weight: 700; color: var(--primary); text-decoration: none; display: flex; align-items: center; gap: 5px;">
+           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+           Voltar ao Início
+        </a>
+        <a href="index.html" rel="dofollow" style="font-weight: 600; color: var(--text); text-decoration: none;">📰 Blog</a>
+    </div>
+  </nav>
+  <div class="container">
+    <main class="content-area"><p>
+    <div class="cta-highlight">
+        <div style="font-size: 1.5rem; margin-bottom: 15px;">🚀 <strong>PACOTE COMPLETO ALINHADO À BNCC 2026</strong></div>
+        <p style="font-size: 1.2rem; line-height: 1.5; margin-bottom: 25px;">
+            Para pacotes e kits completos de <strong>planos de aula e atividades</strong> (PDF e DOCX), visite o 
+            <span style="color: #FFD700; font-size: 1.3rem;">★</span> <strong>Diário da Educação</strong>.
+        </p>
+        <div style="font-size: 1rem; margin-bottom: 20px; opacity: 0.9;">
+            Inclui: Planos de Aula, Atividades, Avaliações, Slides e Gabaritos Editáveis.
+        </div>
+        <a href="https://diariodaeducacao.com.br/" rel="dofollow" class="cta-button">ACESSAR PACOTES COMPLETOS AGORA →</a>
+    </div>
+  ```markdown<br><strong>Tema</strong>: Planejamento de Aula Pronto de Ensino Religioso para o 7º Ano  <br><strong>Público-alvo</strong>: Alunos do 7º ano do Ensino Fundamental  <br><strong>Códigos BNCC</strong>: EM13CN01, EM13CHS02, EM13LP05</p><p><h1>Planejamento de Aula Pronto de Ensino Religioso para o 7º Ano: Um Guia Completo</h1></p><p><h2>$2</h2></p><p>O Ensino Religioso é uma disciplina que desempenha um papel crucial na formação integral dos estudantes. Para alunos do 7º ano, a abordagem deste tema deve ser rica e diversificada, promovendo o respeito e a compreensão das diferentes tradições religiosas e suas contribuições para a cultura e a sociedade. Este guia apresenta um planejamento de aula pronto, que não apenas atende às diretrizes da Base Nacional Comum Curricular (BNCC), mas também proporciona uma experiência de aprendizado significativa e engajadora para os alunos.</p><p>Neste planejamento, abordaremos o contexto histórico e social das principais religiões, a importância do diálogo inter-religioso e o respeito à diversidade cultural. O uso de metodologias ativas e recursos didáticos variados será fundamental para a construção do conhecimento.</p><p><h2>$2</h2></p><p><h3>$3</h3></p><p>- Promover a compreensão e o respeito às diferentes tradições religiosas.<br>- Desenvolver habilidades críticas e reflexivas sobre temas religiosos e sociais.<br>- Fomentar o diálogo inter-religioso e a convivência pacífica entre as diferenças.</p><p><h3>$3</h3></p><p>- Conhecer as principais características das religiões estudadas.<br>- Analisar a influência das religiões na formação da identidade cultural.<br>- Criar um espaço de debate sobre preconceitos e estereótipos religiosos.</p><p><h2>$2</h2></p><p><h3>$3</h3></p><p>#### H3: Aprendizagem Baseada em Projetos (ABP)</p><p>Utilizar a ABP permite que os alunos explorem temas complexos de forma colaborativa. Por exemplo, um projeto sobre "Religiões e sua Influência na Cultura Brasileira" pode ser desenvolvido em grupos.</p><p>#### H3: Debates e Discussões</p><p>Promover debates sobre temas atuais relacionados à religião, como a intolerância religiosa, ajudará os alunos a desenvolverem habilidades argumentativas e de escuta ativa.</p><p>#### H3: Atividades Práticas</p><p>Incluir atividades como visitas a templos ou espaços religiosos, entrevistas com representantes de diversas crenças, ou a elaboração de painéis informativos sobre cada religião estudada.</p><p><h2>$2</h2></p><p><h3>$3</h3></p><p>#### H3: Principais Religiões do Mundo</p><p>- Cristianismo<br>- Islamismo<br>- Judaísmo<br>- Hinduísmo<br>- Budismo</p><p>#### H3: Religiões Afro-brasileiras</p><p>- Candomblé<br>- Umbanda</p><p>#### H3: A Importância do Diálogo Inter-religioso</p><p>Discutir iniciativas de convivência pacífica e respeito mútuo entre diferentes religiões.</p><p><h2>$2</h2></p><p><h3>$3</h3></p><p>#### H3: Avaliação Formativa</p><p>Realizar avaliações contínuas por meio de observações durante as atividades em grupo e discussões em sala de aula.</p><p>#### H3: Avaliação Somativa</p><p>Aplicar um trabalho final onde os alunos devem apresentar um projeto sobre a religião de sua escolha, abordando aspectos culturais e sociais.</p><p><h2>$2</h2></p><p><h3>$3</h3></p><p>- Livros didáticos de Ensino Religioso<br>- Internet para pesquisa<br>- Materiais para elaboração de cartazes e painéis<br>- Vídeos e documentários sobre religiões</p><p><h3>$3</h3></p><p>Utilizar plataformas digitais para debates online, como fóruns ou redes sociais educativas, pode enriquecer a experiência dos alunos.</p><p><h2>$2</h2></p><p><h3>$3</h3></p><p>#### H3: Aula 1: Introdução ao Ensino Religioso</p><p>- Apresentação dos objetivos e conteúdos.<br>- Discussão sobre a importância do respeito às diferenças.</p><p>#### H3: Aula 2: Cristianismo e suas Ramificações</p><p>- História e principais características.<br>- Debate sobre a influência do cristianismo na cultura brasileira.</p><p>#### H3: Aula 3: Islamismo e a Diversidade Cultural</p><p>- Fundamentos do islamismo.<br>- Análise da presença muçulmana no Brasil.</p><p>#### H3: Aula 4: Religiões Afro-brasileiras</p><p>- História e práticas do Candomblé e Umbanda.<br>- Discussão sobre o preconceito enfrentado por essas religiões.</p><p>#### H3: Aula 5: Diálogo Inter-religioso</p><p>- Atividades práticas de simulação de diálogos entre diferentes religiões.<br>- Reflexão sobre a convivência pacífica.</p><p>#### H3: Aula 6: Apresentação de Projetos</p><p>- Apresentação final dos trabalhos dos alunos.<br>- Feedback e avaliação coletiva.</p><p><h2>$2</h2></p><p>O planejamento de aula pronto aqui apresentado é uma ferramenta valiosa para professores de Ensino Religioso do 7º ano, alinhando-se às diretrizes da BNCC e promovendo um ambiente de aprendizado significativo e respeitoso. Por meio de metodologias ativas e conteúdos diversificados, os alunos poderão compreender a relevância das diversas tradições religiosas e desenvolver um espírito crítico e respeitoso.</p><p>Este <a href="https://diariodaeducacao.com.br/">plano de aula pronto</a> está disponível para download em formatos PDF e Word, facilitando a aplicação prática em sala de aula. Para baixar pacotes e kits completos de planos de aula alinhados à BNCC, visite o <a href="https://diariodaeducacao.com.br/">Diário da Educação</a>.<br>```
+    <div class="cta-highlight">
+        <div style="font-size: 1.5rem; margin-bottom: 15px;">🚀 <strong>PACOTE COMPLETO ALINHADO À BNCC 2026</strong></div>
+        <p style="font-size: 1.2rem; line-height: 1.5; margin-bottom: 25px;">
+            Para pacotes e kits completos de <strong>planos de aula e atividades</strong> (PDF e DOCX), visite o 
+            <span style="color: #FFD700; font-size: 1.3rem;">★</span> <strong>Diário da Educação</strong>.
+        </p>
+        <div style="font-size: 1rem; margin-bottom: 20px; opacity: 0.9;">
+            Inclui: Planos de Aula, Atividades, Avaliações, Slides e Gabaritos Editáveis.
+        </div>
+        <a href="https://diariodaeducacao.com.br/" rel="dofollow" class="cta-button">ACESSAR PACOTES COMPLETOS AGORA →</a>
+    </div>
+  </p></main>
+    <aside>
+      <div style="background: #f8fafc; padding: 25px; border-radius: 20px; border: 1px solid #eef2ff; position: sticky; top: 80px; max-height: calc(100vh - 120px); overflow-y: auto;">
+        <h4>🔥 Materiais Recomendados</h4>
+        
+    <div class="product-mini-card">
+        <img src="../images/biologia-planejamentos-e-atividades-ensino-medio-bncc-2026.webp" alt="BIOLOGIA - Planejamentos e Atividades - Ensino Médio - BNCC 2026" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2260%22 height=%2260%22><rect fill=%22%23eee%22 width=%2260%22 height=%2260%22/></svg>'">
+        <div>
+            <h4>BIOLOGIA - Planejamentos e Atividades - Ensino Médio - BNCC 2026</h4>
+            <a href="../produtos/biologia-planejamentos-e-atividades-ensino-medio-bncc-2026.html" rel="dofollow" class="view-btn">Ver Material →</a>
+        </div>
+    </div>
+  
+    <div class="product-mini-card">
+        <img src="../images/relatorios-desenvolvimento-2-ano-fundamental.webp" alt="2º Ano Fundamental - Relatórios de Desenvolvimento | Material Pedagógi" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2260%22 height=%2260%22><rect fill=%22%23eee%22 width=%2260%22 height=%2260%22/></svg>'">
+        <div>
+            <h4>2º Ano Fundamental - Relatórios de Desenvolvimento | Material Pedagógi</h4>
+            <a href="../produtos/relatorios-desenvolvimento-2-ano-fundamental.html" rel="dofollow" class="view-btn">Ver Material →</a>
+        </div>
+    </div>
+  
+    <div class="product-mini-card">
+        <img src="../images/avaliacoes-1o-ao-3o-ano-ensino-medio-bncc-2026.webp" alt="AVALIAÇÕES - 1º AO 3º ANO - ENSINO MÉDIO - BNCC 2026" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2260%22 height=%2260%22><rect fill=%22%23eee%22 width=%2260%22 height=%2260%22/></svg>'">
+        <div>
+            <h4>AVALIAÇÕES - 1º AO 3º ANO - ENSINO MÉDIO - BNCC 2026</h4>
+            <a href="../produtos/avaliacoes-1o-ao-3o-ano-ensino-medio-bncc-2026.html" rel="dofollow" class="view-btn">Ver Material →</a>
+        </div>
+    </div>
+  
+    <div class="product-mini-card">
+        <img src="../images/educacao-fisica-planejamentos-e-atividades-ensino-medio-bncc-2026.webp" alt="EDUCAÇÃO FÍSICA - Planejamentos e Atividades - Ensino Médio - BNCC 2026" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2260%22 height=%2260%22><rect fill=%22%23eee%22 width=%2260%22 height=%2260%22/></svg>'">
+        <div>
+            <h4>EDUCAÇÃO FÍSICA - Planejamentos e Atividades - Ensino Médio - BNCC 2026</h4>
+            <a href="../produtos/educacao-fisica-planejamentos-e-atividades-ensino-medio-bncc-2026.html" rel="dofollow" class="view-btn">Ver Material →</a>
+        </div>
+    </div>
+  
+    <div class="product-mini-card">
+        <img src="../images/lingua-portuguesa-atividades-do-6o-ao-9o-ano-bncc-2026.webp" alt="LÍNGUA PORTUGUESA - Atividades do 6º ao 9º ano - BNCC 2026" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2260%22 height=%2260%22><rect fill=%22%23eee%22 width=%2260%22 height=%2260%22/></svg>'">
+        <div>
+            <h4>LÍNGUA PORTUGUESA - Atividades do 6º ao 9º ano - BNCC 2026</h4>
+            <a href="../produtos/lingua-portuguesa-atividades-do-6o-ao-9o-ano-bncc-2026.html" rel="dofollow" class="view-btn">Ver Material →</a>
+        </div>
+    </div>
+  
+    <div class="product-mini-card">
+        <img src="../images/relatorios-desenvolvimento-4-ano-fundamental.webp" alt="4º Ano Fundamental - Relatórios de Desenvolvimento | Material Pedagógi" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2260%22 height=%2260%22><rect fill=%22%23eee%22 width=%2260%22 height=%2260%22/></svg>'">
+        <div>
+            <h4>4º Ano Fundamental - Relatórios de Desenvolvimento | Material Pedagógi</h4>
+            <a href="../produtos/relatorios-desenvolvimento-4-ano-fundamental.html" rel="dofollow" class="view-btn">Ver Material →</a>
+        </div>
+    </div>
+  
+    <div class="product-mini-card">
+        <img src="../images/ebooks-educacao-infantil-bncc-2026-planejamento-atividades-e-avaliacao.webp" alt="Ebooks Educação Infantil BNCC 2026: Planejamento, Atividades e Avaliação" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2260%22 height=%2260%22><rect fill=%22%23eee%22 width=%2260%22 height=%2260%22/></svg>'">
+        <div>
+            <h4>Ebooks Educação Infantil BNCC 2026: Planejamento, Atividades e Avaliação</h4>
+            <a href="../produtos/ebooks-educacao-infantil-bncc-2026-planejamento-atividades-e-avaliacao.html" rel="dofollow" class="view-btn">Ver Material →</a>
+        </div>
+    </div>
+  
+    <div class="product-mini-card">
+        <img src="../images/educacao-fisica-avaliacoes-6o-ao-9o-ano-bncc-2026.webp" alt="EDUCAÇÃO FÍSICA - AVALIAÇÕES - 6º AO 9º ANO - BNCC 2026" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2260%22 height=%2260%22><rect fill=%22%23eee%22 width=%2260%22 height=%2260%22/></svg>'">
+        <div>
+            <h4>EDUCAÇÃO FÍSICA - AVALIAÇÕES - 6º AO 9º ANO - BNCC 2026</h4>
+            <a href="../produtos/educacao-fisica-avaliacoes-6o-ao-9o-ano-bncc-2026.html" rel="dofollow" class="view-btn">Ver Material →</a>
+        </div>
+    </div>
+  
+    <div class="product-mini-card">
+        <img src="../images/planejamentos-atividades-geografia-6-ao-9-ano-ensino-fundamental-2-bncc-2025.webp" alt="Planejamentos e Atividades Geografia 6º ao 9º Ano BNCC Atualizada" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2260%22 height=%2260%22><rect fill=%22%23eee%22 width=%2260%22 height=%2260%22/></svg>'">
+        <div>
+            <h4>Planejamentos e Atividades Geografia 6º ao 9º Ano BNCC Atualizada</h4>
+            <a href="../produtos/planejamentos-atividades-geografia-6-ao-9-ano-ensino-fundamental-2-bncc-2025.html" rel="dofollow" class="view-btn">Ver Material →</a>
+        </div>
+    </div>
+  
+    <div class="product-mini-card">
+        <img src="../images/matematica-avaliacoes-6o-ao-9o-ano-bncc-2026.webp" alt="MATEMÁTICA - AVALIAÇÕES - 6º AO 9º ANO - BNCC 2026" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2260%22 height=%2260%22><rect fill=%22%23eee%22 width=%2260%22 height=%2260%22/></svg>'">
+        <div>
+            <h4>MATEMÁTICA - AVALIAÇÕES - 6º AO 9º ANO - BNCC 2026</h4>
+            <a href="../produtos/matematica-avaliacoes-6o-ao-9o-ano-bncc-2026.html" rel="dofollow" class="view-btn">Ver Material →</a>
+        </div>
+    </div>
+  
+    <div class="product-mini-card">
+        <img src="../images/slides-animados-biologia-ensino-medio-bncc-2026.webp" alt="SLIDES ANIMADOS - BIOLOGIA - ENSINO MÉDIO - BNCC 2026" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2260%22 height=%2260%22><rect fill=%22%23eee%22 width=%2260%22 height=%2260%22/></svg>'">
+        <div>
+            <h4>SLIDES ANIMADOS - BIOLOGIA - ENSINO MÉDIO - BNCC 2026</h4>
+            <a href="../produtos/slides-animados-biologia-ensino-medio-bncc-2026.html" rel="dofollow" class="view-btn">Ver Material →</a>
+        </div>
+    </div>
+  
+    <div class="product-mini-card">
+        <img src="../images/sociologia-planejamentos-e-atividades-ensino-medio-bncc-2026.webp" alt="SOCIOLOGIA - Planejamentos e Atividades - Ensino Médio - BNCC 2026" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2260%22 height=%2260%22><rect fill=%22%23eee%22 width=%2260%22 height=%2260%22/></svg>'">
+        <div>
+            <h4>SOCIOLOGIA - Planejamentos e Atividades - Ensino Médio - BNCC 2026</h4>
+            <a href="../produtos/sociologia-planejamentos-e-atividades-ensino-medio-bncc-2026.html" rel="dofollow" class="view-btn">Ver Material →</a>
+        </div>
+    </div>
+  
+    <div class="product-mini-card">
+        <img src="../images/quimica-planejamentos-e-atividades-ensino-medio-bncc-2026.webp" alt="QUÍMICA - Planejamentos e Atividades - Ensino Médio - BNCC 2026" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2260%22 height=%2260%22><rect fill=%22%23eee%22 width=%2260%22 height=%2260%22/></svg>'">
+        <div>
+            <h4>QUÍMICA - Planejamentos e Atividades - Ensino Médio - BNCC 2026</h4>
+            <a href="../produtos/quimica-planejamentos-e-atividades-ensino-medio-bncc-2026.html" rel="dofollow" class="view-btn">Ver Material →</a>
+        </div>
+    </div>
+  
+    <div class="product-mini-card">
+        <img src="../images/produto_a89680bc.webp" alt="Produto_a89680bc" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2260%22 height=%2260%22><rect fill=%22%23eee%22 width=%2260%22 height=%2260%22/></svg>'">
+        <div>
+            <h4>Produto_a89680bc</h4>
+            <a href="../produtos/produto_a89680bc.html" rel="dofollow" class="view-btn">Ver Material →</a>
+        </div>
+    </div>
+  
+    <div class="product-mini-card">
+        <img src="../images/combo-de-planejamentos-de-aula-para-maternal-completo-e-editavel-2026.webp" alt="COMBO DE PLANEJAMENTOS DE AULA PARA MATERNAL – COMPLETO E EDITÁVEL! - 2026" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2260%22 height=%2260%22><rect fill=%22%23eee%22 width=%2260%22 height=%2260%22/></svg>'">
+        <div>
+            <h4>COMBO DE PLANEJAMENTOS DE AULA PARA MATERNAL – COMPLETO E EDITÁVEL! - 2026</h4>
+            <a href="../produtos/combo-de-planejamentos-de-aula-para-maternal-completo-e-editavel-2026.html" rel="dofollow" class="view-btn">Ver Material →</a>
+        </div>
+    </div>
+  
+      </div>
+    </aside>
+  </div>
+</body>
+</html>

@@ -205,7 +205,7 @@ const cssStyles = `
     .breadcrumb { max-width: 1200px; margin: 20px auto 0; padding: 0 20px; font-size: 0.85rem; color: var(--text-light); }
     .breadcrumb a { color: var(--primary); text-decoration: none; }
     .breadcrumb a:hover { text-decoration: underline; }
-    .products-grid { max-width: 1200px; margin: 30px auto; padding: 0 20px; display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; }
+    .products-grid { max-width: 1400px; margin: 30px auto; padding: 0 20px; display: grid; grid-template-columns: repeat(6, 1fr); gap: 15px; }
     .product-card { background: var(--card-bg); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94); display: flex; flex-direction: column; }
     .product-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-hover); }
     .card-image { position: relative; width: 100%; aspect-ratio: 4/3; overflow: hidden; background: #f7fafc; }
@@ -228,21 +228,27 @@ const cssStyles = `
     .page-link:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(0,0,0,0.12); background: var(--primary); color: white; }
     .footer { background: var(--darker); color: rgba(255,255,255,0.5); text-align: center; padding: 40px 20px; margin-top: 60px; }
     .footer a { color: var(--accent); text-decoration: none; }
+    @media (max-width: 1200px) {
+      .products-grid { grid-template-columns: repeat(4, 1fr); }
+    }
+    @media (max-width: 1024px) {
+      .products-grid { grid-template-columns: repeat(3, 1fr); }
+    }
     @media (max-width: 768px) {
       .hero { padding: 40px 16px 30px; }
-      .products-grid { grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 16px; }
+      .products-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 0 12px; }
       .card-footer { flex-direction: column; align-items: stretch; }
       .buy-btn { justify-content: center; }
     }
-    @media (max-width: 480px) { .products-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 480px) { .products-grid { grid-template-columns: repeat(2, 1fr); } }
 `;
 
 function generatePage(page, matchedProducts, allPages) {
   const url = `${BASE_URL}/${page.slug}.html`;
 
   const productCards = matchedProducts.map(p => {
-    const title = p.title.replace(/"/g, '&quot;').replace(/</g, '&lt;');
-    const desc = (p.description || '').substring(0, 120).replace(/"/g, '&quot;').replace(/</g, '&lt;');
+    const title = (p.title || '').replace(/<[^>]*>?/gm, '').replace(/"/g, '&quot;');
+    const desc = (p.description || '').replace(/<[^>]*>?/gm, '').substring(0, 120).replace(/"/g, '&quot;');
     // Use local images (relative path from discipline-pages/ to images/)
     const imgSrc = `../images/${(p.localImage || 'images/' + p.slug + '.webp').replace('images/', '')}`;
 
@@ -262,7 +268,7 @@ function generatePage(page, matchedProducts, allPages) {
             <p class="card-desc">${desc}${desc.length >= 120 ? '...' : ''}</p>
             <div class="card-footer">
               ${price ? `<span class="card-price">${price}</span>` : ''}
-              <a href="../produtos/${p.slug}.html" class="buy-btn">Ver Produto →</a>
+              <a href="../produto/${p.slug}.html" class="buy-btn">Ver Produto →</a>
             </div>
           </div>
         </div>`;
@@ -280,7 +286,7 @@ function generatePage(page, matchedProducts, allPages) {
             "@type": "Product",
             "name": "${p.title.replace(/"/g, '\\"')}",
             "description": "${(p.description || '').replace(/"/g, '\\"').substring(0, 200)}",
-            "url": "${BASE_URL}/produtos/${p.slug}.html",
+            "url": "${BASE_URL}/produto/${p.slug}.html",
             "image": "${BASE_URL}/${p.localImage || 'images/' + p.slug + '.webp'}"${p.price ? `,
             "offers": {
               "@type": "Offer",

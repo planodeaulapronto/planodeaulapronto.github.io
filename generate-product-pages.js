@@ -148,8 +148,8 @@ const cssStyles = `
     .related-section { max-width: 1100px; margin: 80px auto; padding: 0 20px; }
     .related-grid { 
       display: grid; 
-      grid-template-columns: repeat(auto-fit, minmax(240px, 280px)); 
-      gap: 30px; 
+      grid-template-columns: repeat(4, 1fr); 
+      gap: 20px; 
       justify-content: center;
     }
     .product-card { 
@@ -167,10 +167,10 @@ const cssStyles = `
     }
     @media (max-width: 768px) {
       .product-layout { grid-template-columns: 1fr; gap: 24px; padding: 20px; }
-      .related-grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
+      .related-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
     }
     @media (max-width: 480px) {
-      .related-grid { grid-template-columns: 1fr; }
+      .related-grid { grid-template-columns: repeat(2, 1fr); }
       .card-footer { flex-direction: column; align-items: stretch; }
       .buy-btn { justify-content: center; }
     }
@@ -297,7 +297,7 @@ function generateProductPage(product, relatedProducts) {
   const colors = catColors[category];
   const icon = catIcons[category];
   const categoryId = category.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '-').toLowerCase();
-  const url = `${BASE_URL}/produtos/${product.slug}.html`;
+  const url = `${BASE_URL}/produto/${product.slug}.html`;
 
   // Local image
   const imgSrc = `../images/${(product.localImage || `images/${product.slug}.webp`).replace('images/', '')}`;
@@ -528,7 +528,7 @@ function generateProductPage(product, relatedProducts) {
 }
 
 // Create output directory
-const outputDir = path.join(__dirname, 'produtos');
+const outputDir = path.join(__dirname, 'produto');
 if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir, { recursive: true });
 
 // Generate all product pages

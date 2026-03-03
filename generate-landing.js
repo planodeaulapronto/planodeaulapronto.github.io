@@ -89,8 +89,8 @@ function generateCatNav() {
 // Generate product cards for a category
 function generateCards(prods) {
   return prods.map(p => {
-    const title = p.title.replace(/"/g, '&quot;').replace(/</g, '&lt;');
-    const desc = (p.description || '').substring(0, 120).replace(/"/g, '&quot;').replace(/</g, '&lt;');
+    const title = (p.title || '').replace(/<[^>]*>?/gm, '').replace(/"/g, '&quot;');
+    const desc = (p.description || '').replace(/<[^>]*>?/gm, '').substring(0, 120).replace(/"/g, '&quot;');
     // Use local images (all 219 products have matching local files in images/)
     const imgSrc = p.localImage || `images/${p.slug}.webp`;
 
@@ -114,7 +114,7 @@ function generateCards(prods) {
                   ${discount ? `<span class="discount-badge">${discount}</span>` : ''}
                 </div>
                 <div class="card-body">
-                  <a href="produtos/${p.slug}.html" rel="dofollow" style="text-decoration: none; color: inherit;">
+                  <a href="produto/${p.slug}.html" rel="dofollow" style="text-decoration: none; color: inherit;">
                     <h3 class="card-title">${title}</h3>
                   </a>
                   <p class="card-desc">${desc}${desc.length >= 120 ? '...' : ''}</p>
@@ -468,9 +468,9 @@ const html = `<!DOCTYPE html>
     /* ===== PRODUCT GRID ===== */
     .products-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 24px;
-      padding: 24px;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 15px;
+      padding: 20px;
       background: #f1f5f9;
       border-radius: 0 0 var(--radius) var(--radius);
     }
@@ -644,18 +644,32 @@ const html = `<!DOCTYPE html>
     .footer a { color: var(--accent); text-decoration: none; }
 
     /* ===== RESPONSIVE ===== */
+    @media (max-width: 1024px) {
+      .products-grid { 
+        grid-template-columns: repeat(3, 1fr); 
+      }
+    }
+    @media (max-width: 480px) {
+      .products-grid { 
+        grid-template-columns: repeat(2, 1fr) !important; 
+      }
+    }
     @media (max-width: 768px) {
       .hero { padding: 60px 16px 40px; }
       .hero-stats { gap: 24px; }
       .stat-number { font-size: 2rem; }
-      .products-grid { grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 16px; padding: 16px; }
+      .products-grid { 
+        grid-template-columns: repeat(2, 1fr); 
+        gap: 12px; 
+        padding: 12px; 
+      }
       .category-header { padding: 18px 20px; }
       .category-header h2 { font-size: 1.2rem; }
       .card-footer { flex-direction: column; align-items: stretch; }
       .buy-btn { justify-content: center; }
     }
     @media (max-width: 480px) {
-      .products-grid { grid-template-columns: 1fr; }
+      .products-grid { grid-template-columns: repeat(2, 1fr); }
     }
 
     /* ===== NO RESULTS ===== */
@@ -844,6 +858,6 @@ const searchIndex = products.map(p => ({
   type: 'product',
   category: categorize(p.slug),
   price: p.price,
-  url: `produtos/${p.slug}.html`
+  url: `produto/${p.slug}.html`
 }));
 fs.writeFileSync(path.join(__dirname, 'search-index-products.json'), JSON.stringify(searchIndex));

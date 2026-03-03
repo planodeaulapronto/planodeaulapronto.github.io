@@ -130,11 +130,11 @@ function generateArticleHtml(article) {
     const hLink = buyLinkRaw.includes('?') ? `${buyLinkRaw.split('?')[0]}?src=github` : `${buyLinkRaw}?src=github`;
     return `
     <div class="product-mini-card">
-        <a href="../produtos/${p.slug}.html" rel="dofollow">
+        <a href="../produto/${p.slug}.html" rel="dofollow">
           <img src="../images/${(p.localImage || 'images/' + p.slug + '.webp').replace('images/', '')}" alt="${p.title.replace(/"/g, '&quot;')}" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2260%22 height=%2260%22><rect fill=%22%23eee%22 width=%2260%22 height=%2260%22/></svg>'">
         </a>
         <div>
-            <a href="../produtos/${p.slug}.html" rel="dofollow" style="text-decoration: none; color: inherit;">
+            <a href="../produto/${p.slug}.html" rel="dofollow" style="text-decoration: none; color: inherit;">
               <h4>${p.title}</h4>
             </a>
             <a href="${hLink}" target="_blank" rel="nofollow" class="view-btn">Acessar Produto →</a>

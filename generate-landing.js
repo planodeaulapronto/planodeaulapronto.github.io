@@ -781,7 +781,13 @@ const html = `<!DOCTYPE html>
 
       const matches = searchIndex.filter(item => 
         item.title.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').includes(query)
-      ).slice(0, 15);
+      )
+      .sort((a, b) => {
+        if (a.type === 'product' && b.type !== 'product') return -1;
+        if (a.type !== 'product' && b.type === 'product') return 1;
+        return 0;
+      })
+      .slice(0, 15);
 
       if (matches.length > 0) {
         resultsOverlay.style.display = 'block';

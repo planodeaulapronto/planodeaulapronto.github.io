@@ -1,0 +1,2 @@
+# XMLs de sitemap devem manter LF (Unix) para compatibilidade com crawlers
+*.xml text eol=lf

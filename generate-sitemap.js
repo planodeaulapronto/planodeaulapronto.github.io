@@ -5,60 +5,76 @@ const products = JSON.parse(fs.readFileSync(path.join(__dirname, 'products.json'
 const BASE_URL = 'https://planodeaulapronto.github.io';
 const today = new Date().toISOString().split('T')[0];
 
-// Discipline pages
+// ── Helper ───────────────────────────────────────────────────────────────────
+// Força LF (\n) em vez de CRLF (\r\n) para compatibilidade com crawlers
+function urlBlock(loc, freq, priority) {
+  return [
+    '  <url>',
+    `    <loc>${loc}</loc>`,
+    `    <lastmod>${today}</lastmod>`,
+    `    <changefreq>${freq}</changefreq>`,
+    `    <priority>${priority}</priority>`,
+    '  </url>'
+  ].join('\n');
+}
+
+function wrapUrlset(blocks) {
+  return [
+    '<?xml version="1.0" encoding="UTF-8"?>',
+    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+    blocks.join('\n'),
+    '</urlset>'
+  ].join('\n');
+}
+
+function writeUtf8(filePath, content) {
+  // Remove qualquer \r para garantir LF puro
+  const clean = content.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+  fs.writeFileSync(filePath, clean, { encoding: 'utf8' });
+}
+
+// ── 1. sitemap-produtos.xml  (home + discipline-pages + products) ─────────────
 const disciplineDir = path.join(__dirname, 'discipline-pages');
 const disciplinePages = fs.existsSync(disciplineDir)
   ? fs.readdirSync(disciplineDir).filter(f => f.endsWith('.html'))
   : [];
 
-let xml = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>${BASE_URL}/</loc>
-    <lastmod>${today}</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>1.0</priority>
-  </url>`;
+const prodBlocks = [
+  urlBlock(`${BASE_URL}/`, 'weekly', '1.0'),
+  ...disciplinePages.map(f => urlBlock(`${BASE_URL}/discipline-pages/${f}`, 'weekly', '0.9')),
+  ...products.map(p => urlBlock(`${BASE_URL}/produtos/${p.slug}.html`, 'monthly', '0.8')),
+];
+writeUtf8(path.join(__dirname, 'sitemap-produtos.xml'), wrapUrlset(prodBlocks));
+console.log(`sitemap-produtos.xml: ${prodBlocks.length} URLs`);
 
-// Discipline pages (priority 0.9)
-disciplinePages.forEach(file => {
-  xml += `
-  <url>
-    <loc>${BASE_URL}/discipline-pages/${file}</loc>
-    <lastmod>${today}</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>`;
-});
-
-// Individual product pages (priority 0.8)
-products.forEach(p => {
-  xml += `
-  <url>
-    <loc>${BASE_URL}/produtos/${p.slug}.html</loc>
-    <lastmod>${today}</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>`;
-});
-
-// Articles (priority 0.7)
+// ── 2. sitemap-artigos.xml  (articles) ───────────────────────────────────────
 const artigosDir = path.join(__dirname, 'artigos');
 const artigosPages = fs.existsSync(artigosDir)
-  ? fs.readdirSync(artigosDir).filter(f => f.endsWith('.html'))
+  ? fs.readdirSync(artigosDir).filter(f => f.endsWith('.html') && f !== 'index.html')
   : [];
 
-artigosPages.forEach(file => {
-  xml += `
-  <url>
-    <loc>${BASE_URL}/artigos/${file}</loc>
-    <lastmod>${today}</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>`;
-});
+const artBlocks = [
+  urlBlock(`${BASE_URL}/artigos/index.html`, 'weekly', '0.8'),
+  ...artigosPages.map(f => urlBlock(`${BASE_URL}/artigos/${f}`, 'monthly', '0.7')),
+];
+writeUtf8(path.join(__dirname, 'sitemap-artigos.xml'), wrapUrlset(artBlocks));
+console.log(`sitemap-artigos.xml: ${artBlocks.length} URLs`);
 
-xml += `\n</urlset>`;
+// ── 3. sitemap.xml  (sitemap index — links para os outros dois) ───────────────
+const sitemapIndex = [
+  '<?xml version="1.0" encoding="UTF-8"?>',
+  '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+  '  <sitemap>',
+  `    <loc>${BASE_URL}/sitemap-produtos.xml</loc>`,
+  `    <lastmod>${today}</lastmod>`,
+  '  </sitemap>',
+  '  <sitemap>',
+  `    <loc>${BASE_URL}/sitemap-artigos.xml</loc>`,
+  `    <lastmod>${today}</lastmod>`,
+  '  </sitemap>',
+  '</sitemapindex>'
+].join('\n');
 
-fs.writeFileSync(path.join(__dirname, 'sitemap.xml'), xml);
-console.log(`sitemap.xml created: 1 home + ${disciplinePages.length} discipline + ${products.length} products + ${artigosPages.length} articles = ${1 + disciplinePages.length + products.length + artigosPages.length} URLs`);
+writeUtf8(path.join(__dirname, 'sitemap.xml'), sitemapIndex);
+console.log(`sitemap.xml (index): referencia 2 sitemaps`);
+console.log(`Total geral: ${prodBlocks.length + artBlocks.length} URLs`);

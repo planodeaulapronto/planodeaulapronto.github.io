@@ -49,11 +49,7 @@ const allBlocks = [
   ...artigosPages.map(f => urlBlock(`${BASE_URL}/artigos/${f}`, 'monthly', '0.7')),
 ];
 
-// Write the single flat sitemap.xml
+// Write ONLY the single flat sitemap.xml
 writeUtf8(path.join(__dirname, 'sitemap.xml'), wrapUrlset(allBlocks));
 
-// Also keep the individual ones just in case, but sitemap.xml is now the primary flat one
-writeUtf8(path.join(__dirname, 'sitemap-produtos.xml'), wrapUrlset(allBlocks.filter(b => b.includes('/produto/') || b.includes('/discipline-pages/') || b.includes('io/ <'))));
-writeUtf8(path.join(__dirname, 'sitemap-artigos.xml'), wrapUrlset(allBlocks.filter(b => b.includes('/artigos/'))));
-
-console.log(`Updated sitemap.xml with ${allBlocks.length} URLs (consolidated).`);
+console.log(`Successfully generated a single flat sitemap.xml with ${allBlocks.length} URLs.`);

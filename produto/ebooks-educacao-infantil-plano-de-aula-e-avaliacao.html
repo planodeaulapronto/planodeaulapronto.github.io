@@ -238,16 +238,19 @@ Transforme sua prática pedagógica com os Ebooks Educação Infantil BNCC 2026,
     .buy-section-top .product-price { margin-bottom: 0; font-size: 3rem; color: #16a34a; font-weight: 800; font-family: 'Outfit', sans-serif; }
     .related-section { max-width: 1000px; margin: 60px auto; padding: 0 20px; }
     .related-section h2 { font-family: 'Outfit', sans-serif; font-size: 1.8rem; margin-bottom: 30px; color: var(--dark); text-align: center; }
-    .related-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 25px; }
+    .related-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
+    @media (min-width: 768px) { .related-grid { grid-template-columns: repeat(3, 1fr); } }
+    @media (min-width: 1024px) { .related-grid { grid-template-columns: repeat(4, 1fr); } }
     .product-card { background: var(--card-bg); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); transition: all 0.35s ease; display: flex; flex-direction: column; height: 100%; border: 1px solid #edf2f7; }
     .product-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-hover); border-color: var(--primary); }
     .card-image { position: relative; width: 100%; aspect-ratio: 1/1; overflow: hidden; background: #f7fafc; }
     .card-image img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; }
     .product-card:hover .card-image img { transform: scale(1.08); }
     .card-body { padding: 18px; display: flex; flex-direction: column; flex: 1; }
-    .card-title { font-family: 'Outfit', sans-serif; font-size: 0.95rem; font-weight: 700; color: var(--dark); line-height: 1.4; margin-bottom: 12px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; flex: 1; }
-    .card-footer { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding-top: 15px; border-top: 1px solid #edf2f7; }
-    .card-price { font-family: 'Outfit', sans-serif; font-size: 1.1rem; font-weight: 800; color: #16a34a; }
+    .card-title { font-family: 'Outfit', sans-serif; font-size: 0.95rem; font-weight: 700; color: var(--dark); line-height: 1.25; margin-bottom: 8px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; min-height: 3.75em; }
+    .card-desc { font-size: 0.8rem; color: var(--text-light); line-height: 1.4; margin-bottom: 12px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; flex: 1; }
+    .card-footer { margin-top: auto; display: flex; flex-direction: column; gap: 10px; padding-top: 15px; border-top: 1px solid #edf2f7; }
+    .card-price { font-family: 'Outfit', sans-serif; font-size: 1.1rem; font-weight: 800; color: #16a34a; text-align: center; }
     .buy-btn-large { 
       display: inline-flex; 
       align-items: center; 
@@ -423,9 +426,12 @@ Transforme sua prática pedagógica com os Ebooks Educação Infantil BNCC 2026,
             </div>
             <div class="card-body">
               <h3 class="card-title">300 Planos de Aula Berçário BNCC Atualizada | Planejamento Diário Completo</h3>
+              <p class="card-desc">300 Planos de Aula Berçário BNCC Atualizada | Planejamento Diário Completo
+
+Você, educador, sabe o quão desafiador pode ser planejar uma rotina de aprendizagem ...</p>
               <div class="card-footer">
                 <span class="card-price">R$ 67,00</span>
-                <a href="plano-de-aula-bercario.html" rel="dofollow" class="buy-btn">Ver Detalhes</a>
+                <a href="plano-de-aula-bercario.html" class="buy-btn">Ver Detalhes →</a>
               </div>
             </div>
           </div>
@@ -435,9 +441,12 @@ Transforme sua prática pedagógica com os Ebooks Educação Infantil BNCC 2026,
             </div>
             <div class="card-body">
               <h3 class="card-title">60 Jogos Pedagógicos Habilidades Cognitivas | Educação Infantil e Fundamental</h3>
+              <p class="card-desc">Transforme a Aprendizagem com os 60 Jogos Pedagógicos para Habilidades Cognitivas
+
+Você, educador ou coordenador, está em busca de um material pedagógico que po...</p>
               <div class="card-footer">
                 <span class="card-price">R$ 47,00</span>
-                <a href="jogos-pedagogicos-habilidades-cognitivas-educacao-infantil-fundamental.html" rel="dofollow" class="buy-btn">Ver Detalhes</a>
+                <a href="jogos-pedagogicos-habilidades-cognitivas-educacao-infantil-fundamental.html" class="buy-btn">Ver Detalhes →</a>
               </div>
             </div>
           </div>
@@ -447,9 +456,12 @@ Transforme sua prática pedagógica com os Ebooks Educação Infantil BNCC 2026,
             </div>
             <div class="card-body">
               <h3 class="card-title">Atividades de Alfabetização Completas | Educação Infantil e Fundamental</h3>
+              <p class="card-desc">Atividades de Alfabetização Completas | Educação Infantil e Fundamental
+
+Bem-vindo ao futuro da alfabetização! Apresentamos o nosso material pedagógico digital,...</p>
               <div class="card-footer">
                 <span class="card-price">R$ 47,00</span>
-                <a href="plano-de-aula-alfabetizacao-completas-educacao-infantil-fundamental.html" rel="dofollow" class="buy-btn">Ver Detalhes</a>
+                <a href="plano-de-aula-alfabetizacao-completas-educacao-infantil-fundamental.html" class="buy-btn">Ver Detalhes →</a>
               </div>
             </div>
           </div>
@@ -459,9 +471,12 @@ Transforme sua prática pedagógica com os Ebooks Educação Infantil BNCC 2026,
             </div>
             <div class="card-body">
               <h3 class="card-title">Atividades Inglês e Espanhol para Crianças | Educação Infantil e Fundamental</h3>
+              <p class="card-desc">Atividades Inglês e Espanhol para Crianças | Educação Infantil e Fundamental
+
+Você, educador, está em busca de materiais que potencializem o aprendizado de seus...</p>
               <div class="card-footer">
                 <span class="card-price">R$ 57,00</span>
-                <a href="plano-de-aula-ingles-espanhol-criancas-educacao-infantil-fundamental.html" rel="dofollow" class="buy-btn">Ver Detalhes</a>
+                <a href="plano-de-aula-ingles-espanhol-criancas-educacao-infantil-fundamental.html" class="buy-btn">Ver Detalhes →</a>
               </div>
             </div>
           </div>

@@ -26,21 +26,6 @@ function wrapUrlset(blocks) {
   ].join('\n');
 }
 
-function wrapSitemapIndex(entries) {
-  return [
-    '<?xml version="1.0" encoding="UTF-8"?>',
-    '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
-    ...entries.map(e => [
-      '  <sitemap>',
-      `    <loc>${e.loc}</loc>`,
-      `    <lastmod>${today}</lastmod>`,
-      '  </sitemap>'
-    ].join('\n')),
-    '</sitemapindex>',
-    ''
-  ].join('\n');
-}
-
 function writeUtf8(filePath, content) {
   const clean = content.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
   fs.writeFileSync(filePath, clean, { encoding: 'utf8' });
@@ -57,37 +42,29 @@ const artigosPages = fs.existsSync(artigosDir)
   ? fs.readdirSync(artigosDir).filter(f => f.endsWith('.html') && f !== 'index.html')
   : [];
 
-// 1) sitemap-pages.xml  (homepage + discipline pages)
-const pagesBlocks = [
+// Gather ALL blocks for a single flat sitemap
+const allBlocks = [
   urlBlock(`${BASE_URL}/`, 'weekly', '1.0'),
   ...disciplinePages.map(f => urlBlock(`${BASE_URL}/discipline-pages/${f}`, 'weekly', '0.9')),
-];
-
-// 2) sitemap-produtos.xml  (product pages)
-const produtosBlocks = [
   ...products.map(p => urlBlock(`${BASE_URL}/produto/${p.slug}.html`, 'weekly', '0.8')),
-];
-
-// 3) sitemap-artigos.xml  (articles)
-const artigosBlocks = [
   urlBlock(`${BASE_URL}/artigos/index.html`, 'weekly', '0.8'),
   ...artigosPages.map(f => urlBlock(`${BASE_URL}/artigos/${f}`, 'monthly', '0.7')),
 ];
 
-// Write sub-sitemaps
-writeUtf8(path.join(__dirname, 'sitemap-pages.xml'), wrapUrlset(pagesBlocks));
-writeUtf8(path.join(__dirname, 'sitemap-produtos.xml'), wrapUrlset(produtosBlocks));
-writeUtf8(path.join(__dirname, 'sitemap-artigos.xml'), wrapUrlset(artigosBlocks));
+// Write ONLY the single flat sitemap.xml
+writeUtf8(path.join(__dirname, 'sitemap.xml'), wrapUrlset(allBlocks));
 
-// Write sitemap index
-writeUtf8(path.join(__dirname, 'sitemap.xml'), wrapSitemapIndex([
-  { loc: `${BASE_URL}/sitemap-pages.xml` },
-  { loc: `${BASE_URL}/sitemap-produtos.xml` },
-  { loc: `${BASE_URL}/sitemap-artigos.xml` },
-]));
+// Also write robots.txt to point to this single sitemap
+const robots = [
+  'User-agent: *',
+  'Allow: /',
+  '',
+  `Sitemap: ${BASE_URL}/sitemap.xml`,
+  '',
+  '# Materiais Pedagogicos BNCC 2026',
+  '# Plano de Aula, Atividades, Avaliacoes e Slides'
+].join('\n');
+writeUtf8(path.join(__dirname, 'robots.txt'), robots);
 
-const total = pagesBlocks.length + produtosBlocks.length + artigosBlocks.length;
-console.log(`Sitemap index generated with 3 sub-sitemaps (${total} URLs total):`);
-console.log(`  sitemap-pages.xml:    ${pagesBlocks.length} URLs`);
-console.log(`  sitemap-produtos.xml: ${produtosBlocks.length} URLs`);
-console.log(`  sitemap-artigos.xml:  ${artigosBlocks.length} URLs`);
+console.log(`Successfully generated a single flat sitemap.xml with ${allBlocks.length} URLs.`);
+console.log('Updated robots.txt to point only to sitemap.xml.');

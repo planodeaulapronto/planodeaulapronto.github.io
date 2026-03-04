@@ -94,7 +94,7 @@ const stripHtml = (html) => (html || '')
 function generateCards(prods) {
   return prods.map(p => {
     const title = stripHtml(p.title).replace(/"/g, '&quot;');
-    const desc = stripHtml(p.description).substring(0, 160).replace(/"/g, '&quot;');
+    const desc = stripHtml(p.description).substring(0, 80).replace(/"/g, '&quot;');
     const imgSrc = p.localImage || `images/${p.slug}.webp`;
 
     let buyLink = p.hotmartLink || p.link || '';
@@ -119,10 +119,10 @@ function generateCards(prods) {
                   <a href="produto/${p.slug}.html" rel="dofollow" style="text-decoration: none; color: inherit;">
                     <h3 class="card-title">${title}</h3>
                   </a>
-                  <p class="card-desc">${desc}${desc.length >= 160 ? '...' : ''}</p>
+                  <p class="card-desc">${desc}${desc.length >= 80 ? '...' : ''}</p>
                   <div class="card-footer">
                     ${price ? `<span class="card-price">${price}</span>` : ''}
-                    <a href="${buyLink}" target="_blank" rel="nofollow" class="buy-btn">Acessar Produto →</a>
+                    <a href="${buyLink}" target="_blank" rel="nofollow" class="buy-btn">Acessar</a>
                   </div>
                 </div>
               </div>`;
@@ -165,36 +165,47 @@ let html = '<!DOCTYPE html>\n<html lang="pt-BR">\n<head>\n' +
   '    }\n' +
   '    * { margin: 0; padding: 0; box-sizing: border-box; }\n' +
   '    body { font-family: \'Inter\', sans-serif; color: var(--text); background: #f8fafc; line-height: 1.6; overflow-x: hidden; }\n' +
-  '    .hero { background: linear-gradient(135deg, var(--darker) 0%, #16213e 50%, #1a1a2e 100%); padding: 80px 20px 60px; text-align: center; position: relative; }\n' +
-  '    .hero h1 { font-family: \'Outfit\', sans-serif; font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 800; color: white; margin-bottom: 20px; }\n' +
+  '    .hero { background: linear-gradient(135deg, var(--darker) 0%, #16213e 50%, #1a1a2e 100%); padding: 50px 20px 40px; text-align: center; position: relative; }\n' +
+  '    .hero h1 { font-family: \'Outfit\', sans-serif; font-size: clamp(1.6rem, 4vw, 2.8rem); font-weight: 800; color: white; margin-bottom: 14px; }\n' +
   '    .hero h1 span { background: linear-gradient(135deg, #6C63FF, #FF6B9D, #00D4AA); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }\n' +
-  '    .hero p { color: rgba(255,255,255,0.7); font-size: 1.15rem; max-width: 650px; margin: 0 auto 32px; }\n' +
-  '    .hero-stats { display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; }\n' +
-  '    .stat-number { font-family: \'Outfit\', sans-serif; font-size: 2.5rem; font-weight: 800; color: var(--accent); }\n' +
-  '    .stat-label { color: rgba(255,255,255,0.6); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; }\n' +
-  '    .cat-nav { background: white; padding: 20px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 20px rgba(0,0,0,0.06); border-bottom: 1px solid #edf2f7; }\n' +
-  '    .cat-nav-inner { max-width: 1400px; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; }\n' +
-  '    .cat-btn { display: inline-flex; align-items: center; gap: 10px; padding: 12px 24px; border-radius: 50px; color: white; text-decoration: none; font-size: 0.95rem; font-weight: 700; transition: all 0.3s; }\n' +
-  '    .cat-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.15); }\n' +
-  '    .category-section { max-width: 1400px; margin: 40px auto; padding: 0 20px; }\n' +
-  '    .category-header { padding: 24px 32px; border-radius: var(--radius) var(--radius) 0 0; display: flex; align-items: center; justify-content: space-between; }\n' +
-  '    .category-header h2 { font-family: \'Outfit\', sans-serif; font-size: 1.6rem; color: white; }\n' +
-  '    .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; padding: 20px; background: #f1f5f9; border-radius: 0 0 var(--radius) var(--radius); }\n' +
-  '    @media (min-width: 1200px) { .products-grid { grid-template-columns: repeat(6, 1fr); } }\n' +
-  '    .product-card { background: white; border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); transition: all 0.3s; display: flex; flex-direction: column; }\n' +
-  '    .card-image { position: relative; width: 100%; aspect-ratio: 4/3; }\n' +
+  '    .hero p { color: rgba(255,255,255,0.7); font-size: 0.95rem; max-width: 600px; margin: 0 auto 24px; }\n' +
+  '    .hero-stats { display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; }\n' +
+  '    .stat-number { font-family: \'Outfit\', sans-serif; font-size: 1.8rem; font-weight: 800; color: var(--accent); }\n' +
+  '    .stat-label { color: rgba(255,255,255,0.6); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; }\n' +
+  '    .cat-nav { background: white; padding: 12px 16px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.06); border-bottom: 1px solid #edf2f7; }\n' +
+  '    .cat-nav-inner { max-width: 1400px; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }\n' +
+  '    .cat-btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border-radius: 50px; color: white; text-decoration: none; font-size: 0.8rem; font-weight: 700; transition: all 0.3s; }\n' +
+  '    .cat-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,0.15); }\n' +
+  '    .cat-icon { font-size: 1rem; }\n' +
+  '    .cat-count { background: rgba(255,255,255,0.25); padding: 1px 6px; border-radius: 10px; font-size: 0.7rem; }\n' +
+  '    .category-section { max-width: 1400px; margin: 24px auto; padding: 0 16px; }\n' +
+  '    .category-header { padding: 14px 20px; border-radius: 12px 12px 0 0; display: flex; align-items: center; justify-content: space-between; }\n' +
+  '    .category-header h2 { font-family: \'Outfit\', sans-serif; font-size: 1.1rem; color: white; }\n' +
+  '    .section-count { color: rgba(255,255,255,0.8); font-size: 0.75rem; font-weight: 600; }\n' +
+  '    .products-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 12px; background: #f1f5f9; border-radius: 0 0 var(--radius) var(--radius); }\n' +
+  '    @media (min-width: 640px) { .products-grid { grid-template-columns: repeat(3, 1fr); } }\n' +
+  '    @media (min-width: 900px) { .products-grid { grid-template-columns: repeat(4, 1fr); } }\n' +
+  '    @media (min-width: 1100px) { .products-grid { grid-template-columns: repeat(5, 1fr); } }\n' +
+  '    @media (min-width: 1360px) { .products-grid { grid-template-columns: repeat(6, 1fr); } }\n' +
+  '    .product-card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.06); transition: all 0.3s; display: flex; flex-direction: column; height: 100%; }\n' +
+  '    .product-card:hover { box-shadow: 0 6px 20px rgba(0,0,0,0.12); transform: translateY(-2px); }\n' +
+  '    .card-image { position: relative; width: 100%; aspect-ratio: 1/1; overflow: hidden; background: #f8fafc; }\n' +
   '    .card-image img { width: 100%; height: 100%; object-fit: cover; }\n' +
-  '    .card-body { padding: 15px; flex: 1; display: flex; flex-direction: column; }\n' +
-  '    .card-title { font-family: \'Outfit\', sans-serif; font-size: 0.95rem; font-weight: 700; color: var(--dark); }\n' +
-  '    .card-price { font-weight: 800; color: #16a34a; font-size: 1.1rem; }\n' +
-  '    .buy-btn { background: var(--primary); color: white; padding: 8px 16px; border-radius: 20px; text-decoration: none; font-size: 0.8rem; font-weight: 700; }\n' +
-  '    .search-container { max-width: 600px; margin: 30px auto 0; position: relative; z-index: 1001; }\n' +
+  '    .discount-badge { position: absolute; top: 6px; right: 6px; background: #ef4444; color: white; font-size: 0.65rem; font-weight: 800; padding: 2px 6px; border-radius: 6px; }\n' +
+  '    .card-body { padding: 8px 10px 10px; flex: 1; display: flex; flex-direction: column; }\n' +
+  '    .card-title { font-family: \'Outfit\', sans-serif; font-size: 0.75rem; font-weight: 700; color: var(--dark); margin-bottom: 4px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.25; min-height: 1.9em; }\n' +
+  '    .card-desc { display: none; }\n' +
+  '    .card-footer { margin-top: auto; display: flex; align-items: center; justify-content: space-between; gap: 6px; padding-top: 6px; border-top: 1px solid #f1f5f9; }\n' +
+  '    .card-price { font-weight: 800; color: #16a34a; font-size: 0.8rem; white-space: nowrap; }\n' +
+  '    .buy-btn { background: var(--primary); color: white; padding: 6px 10px; border-radius: 8px; text-decoration: none; font-size: 0.65rem; font-weight: 700; text-align: center; white-space: nowrap; transition: background 0.2s; }\n' +
+  '    .buy-btn:hover { background: var(--primary-dark); }\n' +
+  '    .search-container { max-width: 500px; margin: 20px auto 0; position: relative; z-index: 1001; }\n' +
   '    .search-box { position: relative; }\n' +
-  '    .search-box input { width: 100%; padding: 16px 20px 16px 50px; border-radius: 50px; border: 2px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.1); color: white; font-size: 1rem; outline: none; transition: all 0.3s; }\n' +
+  '    .search-box input { width: 100%; padding: 12px 16px 12px 40px; border-radius: 50px; border: 2px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.1); color: white; font-size: 0.9rem; outline: none; transition: all 0.3s; }\n' +
   '    .search-box input:focus { background: white; color: var(--dark); border-color: var(--primary); }\n' +
   '    #searchOverlay { position: absolute; top: calc(100% + 10px); left: 0; right: 0; background: white; border-radius: 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); z-index: 2000; max-height: 500px; overflow-y: auto; display: none; padding: 10px; border: 1px solid #eee; }\n' +
   '    .search-backdrop { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); z-index: 1000; display: none; }\n' +
-  '    .footer { background: var(--darker); color: white; padding: 40px 20px; text-align: center; margin-top: 60px; }\n' +
+  '    .footer { background: var(--darker); color: white; padding: 24px 16px; text-align: center; margin-top: 40px; font-size: 0.8rem; }\n' +
   '  </style>\n</head>\n<body>\n' +
   '  <div class="search-backdrop" id="searchBackdrop"></div>\n' +
   '  <header class="hero">\n    <div class="hero-content">\n' +

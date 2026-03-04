@@ -5,6 +5,7 @@ const products = JSON.parse(fs.readFileSync(path.join(__dirname, 'products.json'
 console.log(`Loaded ${products.length} products`);
 
 const BASE_URL = 'https://planodeaulapronto.github.io';
+const buildTime = new Date().toLocaleString('pt-BR');
 
 // Categorize products
 function categorize(slug) {
@@ -213,16 +214,19 @@ let html = '<!DOCTYPE html>\n<html lang="pt-BR">\n<head>\n' +
   '    </div>\n  </header>\n' +
   '  <nav class="cat-nav">\n    <div class="cat-nav-inner">' + generateCatNav() + '</div>\n  </nav>\n' +
   '  <main id="productsMain">' + generateSections() + '</main>\n' +
-  '  <footer class="footer"><p>© 2026 — Materiais Pedagógicos BNCC</p></footer>\n' +
+  '  <footer class="footer"><p>© 2026 — Materiais Pedagógicos BNCC - Atualizado: ' + buildTime + '</p></footer>\n' +
   '  <script>\n' +
   '    let searchIndex = [];\n' +
   '    async function loadAJAXIndex() {\n' +
+  '      const t = new Date().getTime();\n' +
+  '      console.log("Loading search index v" + t);\n' +
   '      try {\n' +
   '        const [p, a] = await Promise.all([\n' +
-  '          fetch(\'search-index-products.json\').then(r => r.json()),\n' +
-  '          fetch(\'search-index-articles.json\').then(r => r.ok ? r.json() : [])\n' +
+  '          fetch(\'search-index-products.json?v=\' + t).then(r => r.json()),\n' +
+  '          fetch(\'search-index-articles.json?v=\' + t).then(r => r.ok ? r.json() : [])\n' +
   '        ]);\n' +
   '        searchIndex = [...p, ...a];\n' +
+  '        console.log("Search index loaded: " + searchIndex.length + " items");\n' +
   '      } catch(e) { console.error(\'AJAX failed\', e); }\n' +
   '    }\n' +
   '    loadAJAXIndex();\n' +
@@ -258,10 +262,11 @@ let html = '<!DOCTYPE html>\n<html lang="pt-BR">\n<head>\n' +
   '        sOverlay.innerHTML = matches.map(item => {\n' +
   '          const icon = item.type === "article" ? "📰" : "📦";\n' +
   '          const price = item.price ? `<span style="color: #16a34a; font-weight: 800">R$ ${item.price}</span>` : "";\n' +
+  '          const titleClean = stripHtmlClient(item.title);\n' +
   '          return `<a href="${item.url}" style="display: flex; align-items: center; gap: 10px; padding: 12px; text-decoration: none; border-bottom: 1px solid #f1f5f9; border-radius: 8px;">\n' +
   '            <span style="font-size: 1.2rem">${icon}</span>\n' +
   '            <div style="flex: 1">\n' +
-  '              <div style="font-weight: 700; color: #1a1a2e; font-size: 0.9rem">${item.title}</div>\n' +
+  '              <div style="font-weight: 700; color: #1a1a2e; font-size: 0.9rem">${titleClean}</div>\n' +
   '              <div style="font-size: 0.75rem; color: #64748b">${item.category || item.type}</div>\n' +
   '            </div>\n' +
   '            ${price}\n' +

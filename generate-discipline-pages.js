@@ -402,7 +402,7 @@ function generatePage(page, matchedProducts, allPages) {
   </header>
 
   <nav class="breadcrumb">
-    <a href="index.html">← Todos os Materiais (${products.length})</a> / ${page.title.split('|')[0].trim()}
+    <a href="../index.html">← Todos os Materiais (${products.length})</a> / ${page.title.split('|')[0].trim()}
   </nav>
 
   <div class="products-grid">
@@ -412,7 +412,7 @@ function generatePage(page, matchedProducts, allPages) {
   <section class="other-pages">
     <h2>📚 Veja também outros materiais:</h2>
     <div class="pages-grid">
-      <a href="index.html" class="page-link">📋 Todos os Materiais (${products.length})</a>
+      <a href="../index.html" class="page-link">📋 Todos os Materiais (${products.length})</a>
       ${otherPages}
     </div>
   </section>

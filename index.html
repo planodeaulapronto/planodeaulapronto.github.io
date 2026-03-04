@@ -3712,16 +3712,19 @@
               </div>
           </div>
         </section></main>
-  <footer class="footer"><p>© 2026 — Materiais Pedagógicos BNCC</p></footer>
+  <footer class="footer"><p>© 2026 — Materiais Pedagógicos BNCC - Atualizado: 03/03/2026, 23:03:25</p></footer>
   <script>
     let searchIndex = [];
     async function loadAJAXIndex() {
+      const t = new Date().getTime();
+      console.log("Loading search index v" + t);
       try {
         const [p, a] = await Promise.all([
-          fetch('search-index-products.json').then(r => r.json()),
-          fetch('search-index-articles.json').then(r => r.ok ? r.json() : [])
+          fetch('search-index-products.json?v=' + t).then(r => r.json()),
+          fetch('search-index-articles.json?v=' + t).then(r => r.ok ? r.json() : [])
         ]);
         searchIndex = [...p, ...a];
+        console.log("Search index loaded: " + searchIndex.length + " items");
       } catch(e) { console.error('AJAX failed', e); }
     }
     loadAJAXIndex();
@@ -3757,10 +3760,11 @@
         sOverlay.innerHTML = matches.map(item => {
           const icon = item.type === "article" ? "📰" : "📦";
           const price = item.price ? `<span style="color: #16a34a; font-weight: 800">R$ ${item.price}</span>` : "";
+          const titleClean = stripHtmlClient(item.title);
           return `<a href="${item.url}" style="display: flex; align-items: center; gap: 10px; padding: 12px; text-decoration: none; border-bottom: 1px solid #f1f5f9; border-radius: 8px;">
             <span style="font-size: 1.2rem">${icon}</span>
             <div style="flex: 1">
-              <div style="font-weight: 700; color: #1a1a2e; font-size: 0.9rem">${item.title}</div>
+              <div style="font-weight: 700; color: #1a1a2e; font-size: 0.9rem">${titleClean}</div>
               <div style="font-size: 0.75rem; color: #64748b">${item.category || item.type}</div>
             </div>
             ${price}

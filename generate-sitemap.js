@@ -5,8 +5,6 @@ const products = JSON.parse(fs.readFileSync(path.join(__dirname, 'products.json'
 const BASE_URL = 'https://planodeaulapronto.github.io';
 const today = new Date().toISOString().split('T')[0];
 
-// ── Helper ───────────────────────────────────────────────────────────────────
-// Força LF (\n) em vez de CRLF (\r\n) para compatibilidade com crawlers
 function urlBlock(loc, freq, priority) {
   return [
     '  <url>',
@@ -28,53 +26,34 @@ function wrapUrlset(blocks) {
 }
 
 function writeUtf8(filePath, content) {
-  // Remove qualquer \r para garantir LF puro
   const clean = content.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
   fs.writeFileSync(filePath, clean, { encoding: 'utf8' });
 }
 
-// ── 1. sitemap-produtos.xml  (home + discipline-pages + products) ─────────────
+// Gather all pages for a single flat sitemap
 const disciplineDir = path.join(__dirname, 'discipline-pages');
 const disciplinePages = fs.existsSync(disciplineDir)
   ? fs.readdirSync(disciplineDir).filter(f => f.endsWith('.html'))
   : [];
 
-const prodBlocks = [
-  urlBlock(`${BASE_URL}/`, 'weekly', '1.0'),
-  ...disciplinePages.map(f => urlBlock(`${BASE_URL}/${f}`, 'weekly', '0.9')),
-  ...products.map(p => urlBlock(`${BASE_URL}/produto/${p.slug}.html`, 'weekly', '0.8')),
-];
-writeUtf8(path.join(__dirname, 'sitemap-produtos.xml'), wrapUrlset(prodBlocks));
-console.log(`sitemap-produtos.xml: ${prodBlocks.length} URLs`);
-
-// ── 2. sitemap-artigos.xml  (articles) ───────────────────────────────────────
 const artigosDir = path.join(__dirname, 'artigos');
 const artigosPages = fs.existsSync(artigosDir)
   ? fs.readdirSync(artigosDir).filter(f => f.endsWith('.html') && f !== 'index.html')
   : [];
 
-const artBlocks = [
+const allBlocks = [
+  urlBlock(`${BASE_URL}/`, 'weekly', '1.0'),
+  ...disciplinePages.map(f => urlBlock(`${BASE_URL}/discipline-pages/${f}`, 'weekly', '0.9')),
+  ...products.map(p => urlBlock(`${BASE_URL}/produto/${p.slug}.html`, 'weekly', '0.8')),
   urlBlock(`${BASE_URL}/artigos/index.html`, 'weekly', '0.8'),
   ...artigosPages.map(f => urlBlock(`${BASE_URL}/artigos/${f}`, 'monthly', '0.7')),
 ];
-writeUtf8(path.join(__dirname, 'sitemap-artigos.xml'), wrapUrlset(artBlocks));
-console.log(`sitemap-artigos.xml: ${artBlocks.length} URLs`);
 
-// ── 3. sitemap.xml  (sitemap index — links para os outros dois) ───────────────
-const sitemapIndex = [
-  '<?xml version="1.0" encoding="UTF-8"?>',
-  '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
-  '  <sitemap>',
-  `    <loc>${BASE_URL}/sitemap-produtos.xml</loc>`,
-  `    <lastmod>${today}</lastmod>`,
-  '  </sitemap>',
-  '  <sitemap>',
-  `    <loc>${BASE_URL}/sitemap-artigos.xml</loc>`,
-  `    <lastmod>${today}</lastmod>`,
-  '  </sitemap>',
-  '</sitemapindex>'
-].join('\n');
+// Write the single flat sitemap.xml
+writeUtf8(path.join(__dirname, 'sitemap.xml'), wrapUrlset(allBlocks));
 
-writeUtf8(path.join(__dirname, 'sitemap.xml'), sitemapIndex);
-console.log(`sitemap.xml (index): referencia 2 sitemaps`);
-console.log(`Total geral: ${prodBlocks.length + artBlocks.length} URLs`);
+// Also keep the individual ones just in case, but sitemap.xml is now the primary flat one
+writeUtf8(path.join(__dirname, 'sitemap-produtos.xml'), wrapUrlset(allBlocks.filter(b => b.includes('/produto/') || b.includes('/discipline-pages/') || b.includes('io/ <'))));
+writeUtf8(path.join(__dirname, 'sitemap-artigos.xml'), wrapUrlset(allBlocks.filter(b => b.includes('/artigos/'))));
+
+console.log(`Updated sitemap.xml with ${allBlocks.length} URLs (consolidated).`);

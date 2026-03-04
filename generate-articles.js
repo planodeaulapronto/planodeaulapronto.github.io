@@ -240,9 +240,19 @@ articles.forEach(article => {
   fs.writeFileSync(path.join(outputDir, article.slug + '.html'), html);
 });
 
-const articleIndex = articles.map(a => ({
-  title: a.title, slug: a.slug, type: 'article', category: a.category, url: 'artigos/' + a.slug + '.html'
-}));
+const articleIndex = articles.map(a => {
+  const stripHtml = (html) => (html || '')
+    .replace(/<[^>]*>?/gm, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+  return {
+    title: stripHtml(a.title),
+    slug: a.slug,
+    type: 'article',
+    category: a.category,
+    url: 'artigos/' + a.slug + '.html'
+  };
+});
 fs.writeFileSync(path.join(__dirname, 'search-index-articles.json'), JSON.stringify(articleIndex));
 
 const indexHtml = `<!DOCTYPE html>

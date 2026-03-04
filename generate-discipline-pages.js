@@ -247,8 +247,14 @@ function generatePage(page, matchedProducts, allPages) {
   const url = `${BASE_URL}/${page.slug}.html`;
 
   const productCards = matchedProducts.map(p => {
-    const title = (p.title || '').replace(/<[^>]*>?/gm, '').replace(/"/g, '&quot;');
-    const desc = (p.description || '').replace(/<[^>]*>?/gm, '').substring(0, 120).replace(/"/g, '&quot;');
+    const stripHtml = (html) => (html || '')
+      .replace(/<[^>]*>?/gm, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+
+    const title = stripHtml(p.title).replace(/"/g, '&quot;');
+    const desc = stripHtml(p.description).substring(0, 160).replace(/"/g, '&quot;');
+
     // Use local images (relative path from discipline-pages/ to images/)
     const imgSrc = `../images/${(p.localImage || 'images/' + p.slug + '.webp').replace('images/', '')}`;
 
@@ -265,7 +271,7 @@ function generatePage(page, matchedProducts, allPages) {
           </div>
           <div class="card-body">
             <h3 class="card-title">${title}</h3>
-            <p class="card-desc">${desc}${desc.length >= 120 ? '...' : ''}</p>
+            <p class="card-desc">${desc}${desc.length >= 160 ? '...' : ''}</p>
             <div class="card-footer">
               ${price ? `<span class="card-price">${price}</span>` : ''}
               <a href="../produto/${p.slug}.html" class="buy-btn">Ver Produto →</a>

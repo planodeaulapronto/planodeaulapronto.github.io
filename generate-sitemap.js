@@ -41,7 +41,7 @@ const disciplinePages = fs.existsSync(disciplineDir)
 
 const prodBlocks = [
   urlBlock(`${BASE_URL}/`, 'weekly', '1.0'),
-  ...disciplinePages.map(f => urlBlock(`${BASE_URL}/discipline-pages/${f}`, 'weekly', '0.9')),
+  ...disciplinePages.map(f => urlBlock(`${BASE_URL}/${f}`, 'weekly', '0.9')),
   ...products.map(p => urlBlock(`${BASE_URL}/produto/${p.slug}.html`, 'weekly', '0.8')),
 ];
 writeUtf8(path.join(__dirname, 'sitemap-produtos.xml'), wrapUrlset(prodBlocks));

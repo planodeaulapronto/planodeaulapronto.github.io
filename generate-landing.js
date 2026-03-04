@@ -4,13 +4,15 @@ const path = require('path');
 const products = JSON.parse(fs.readFileSync(path.join(__dirname, 'products.json'), 'utf8'));
 console.log(`Loaded ${products.length} products`);
 
+const BASE_URL = 'https://planodeaulapronto.github.io';
+
 // Categorize products
 function categorize(slug) {
   const s = slug.toLowerCase();
   if (s.includes('bercario') || s.includes('maternal') || s.includes('pre-escola') || s.includes('educacao-infantil') || s.includes('cartas-de-intencao') || s.includes('planner-educacao-especial') || s.includes('50-projetos-para-pre') || s.includes('ebooks-educacao-infantil') || s.includes('planejamentos-educacao-infantil')) return 'Educação Infantil';
   if (s.includes('1o-ao-5o') || s.includes('1-ao-5') || s.includes('anos-iniciais') || s.includes('1o-ano') || s.includes('2o-ano') || s.includes('3o-ano') || s.includes('4o-ano') || s.includes('5o-ano') || s.includes('1-ano') || s.includes('2-ano') || s.includes('3-ano') || s.includes('4-ano') || s.includes('5-ano')) return 'Ensino Fundamental I';
   if (s.includes('6o-ao-9o') || s.includes('6-ao-9') || s.includes('fundamental-2')) return 'Ensino Fundamental II';
-  if (s.includes('ensino-medio') || s.includes('novo-ensino-medio') || s.includes('ensino-medio')) return 'Ensino Médio';
+  if (s.includes('ensino-medio') || s.includes('novo-ensino-medio')) return 'Ensino Médio';
   if (s.includes('eja') || s.includes('educacao-jovens-adultos')) return 'EJA';
   if (s.includes('educacao-especial') || s.includes('tdah') || s.includes('autismo') || s.includes('dislexia') || s.includes('libras') || s.includes('estimulacao-cognitiva') || s.includes('aee') || s.includes('sindrome-down')) return 'Educação Especial';
   if (s.includes('alfabetizacao') || s.includes('consciencia-fonologica') || s.includes('alfabetinho')) return 'Alfabetização';
@@ -61,11 +63,6 @@ products.forEach(p => {
   categories[cat].push(p);
 });
 
-// Print category counts
-catOrder.forEach(cat => {
-  if (categories[cat]) console.log(`${cat}: ${categories[cat].length} produtos`);
-});
-
 // Generate category nav buttons
 function generateCatNav() {
   const categoriesHtml = catOrder.filter(c => categories[c] && categories[c].length > 0).map(cat => {
@@ -86,15 +83,19 @@ function generateCatNav() {
             </a>`;
 }
 
+// Helper to strip HTML for Node.js
+const stripHtml = (html) => (html || '')
+  .replace(/<[^>]*>?/gm, ' ')
+  .replace(/\s+/g, ' ')
+  .trim();
+
 // Generate product cards for a category
 function generateCards(prods) {
   return prods.map(p => {
-    const title = (p.title || '').replace(/<[^>]*>?/gm, '').replace(/"/g, '&quot;');
-    const desc = (p.description || '').replace(/<[^>]*>?/gm, '').substring(0, 120).replace(/"/g, '&quot;');
-    // Use local images (all 219 products have matching local files in images/)
+    const title = stripHtml(p.title).replace(/"/g, '&quot;');
+    const desc = stripHtml(p.description).substring(0, 160).replace(/"/g, '&quot;');
     const imgSrc = p.localImage || `images/${p.slug}.webp`;
 
-    // Force exactly ?src=github for all Hotmart links
     let buyLink = p.hotmartLink || p.link || '';
     if (buyLink.includes('go.hotmart.com')) {
       const urlBase = buyLink.split('?')[0];
@@ -117,7 +118,7 @@ function generateCards(prods) {
                   <a href="produto/${p.slug}.html" rel="dofollow" style="text-decoration: none; color: inherit;">
                     <h3 class="card-title">${title}</h3>
                   </a>
-                  <p class="card-desc">${desc}${desc.length >= 120 ? '...' : ''}</p>
+                  <p class="card-desc">${desc}${desc.length >= 160 ? '...' : ''}</p>
                   <div class="card-footer">
                     ${price ? `<span class="card-price">${price}</span>` : ''}
                     <a href="${buyLink}" target="_blank" rel="nofollow" class="buy-btn">Acessar Produto →</a>
@@ -146,718 +147,149 @@ function generateSections() {
   }).join('\n');
 }
 
-const html = `<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Plano de Aula Pronto BNCC 2026 - Baixar em Word e PDF Editável</title>
-  <meta name="description" content="Plano de Aula Pronto BNCC 2026. Baixe plano de aula diário, semanal, bimestral e anual, editável em Word e PDF para imprimir. Materiais completos de acordo com a BNCC para todos os anos.">
-  <meta name="keywords" content="plano de aula pronto bncc 2026, baixar plano de aula bncc, plano de aula word pdf, planejamento escolar bncc, atividades pedagógicas prontas, plano de aula diário semanal anual">
-  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
-  <meta name="author" content="Materiais Pedagógicos BNCC">
-  <meta name="google-site-verification" content="Vbln8TI_g73ZuTp8c64QIKZAo06Bka2moPfzFAmViSQ">
-  <link rel="canonical" href="https://planodeaulapronto.github.io/">
-
-  <!-- Open Graph / Facebook -->
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://planodeaulapronto.github.io/">
-  <meta property="og:title" content="Plano de Aula Pronto BNCC 2026 - Materiais em Word e PDF">
-  <meta property="og:description" content="Baixe seu Plano de Aula Pronto BNCC 2026. Materiais editáveis, diários, semanais e anuais para professores.">
-  <meta property="og:image" content="${products[0] ? `https://planodeaulapronto.github.io/${products[0].localImage || 'images/' + products[0].slug + '.webp'}` : ''}">
-  <meta property="og:locale" content="pt_BR">
-  <meta property="og:site_name" content="Materiais Pedagógicos BNCC 2026">
-
-  <!-- Twitter -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Materiais Pedagógicos BNCC 2026 | ${products.length} Produtos Prontos">
-  <meta name="twitter:description" content="Planos de aula prontos, atividades, avaliações e slides alinhados à BNCC 2026 para todos os níveis de ensino.">
-  <meta name="twitter:image" content="${products[0] ? `https://planodeaulapronto.github.io/${products[0].localImage || 'images/' + products[0].slug + '.webp'}` : ''}">
-
-  <!-- Schema.org JSON-LD -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "CollectionPage",
-    "name": "Plano de Aula Pronto BNCC 2026",
-    "description": "Baixe agora Plano de Aula Pronto BNCC 2026. Planos de aula diários, semanais, bimestrais e anuais editáveis em Word e PDF. Tudo de acordo com a BNCC.",
-    "url": "https://planodeaulapronto.github.io/",
-    "numberOfItems": ${products.length},
-    "mainEntity": {
-      "@type": "ItemList",
-      "numberOfItems": ${products.length},
-      "itemListElement": [
-        ${products.slice(0, 30).map((p, i) => {
-  const productUrl = `https://planodeaulapronto.github.io/produtos/${p.slug}.html`;
-  const productImg = `https://planodeaulapronto.github.io/${p.localImage || 'images/' + p.slug + '.webp'}`;
-  return `{
-          "@type": "ListItem",
-          "position": ${i + 1},
-          "item": {
-            "@type": "Product",
-            "name": "${p.title.replace(/"/g, '\\"')}",
-            "description": "${(p.description || '').replace(/"/g, '\\"').substring(0, 200)}",
-            "url": "${productUrl}",
-            "image": "${productImg}"${p.price ? `,
-            "offers": {
-              "@type": "Offer",
-              "priceCurrency": "BRL",
-              "price": "${p.price.replace(',', '.')}",
-              "availability": "https://schema.org/InStock"
-            }` : ''}
-          }
-        }`;
-}).join(',\n        ')}
-      ]
-    }
-  }
-  </script>
-
-  <!-- FAQ Schema for SEO -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "Onde encontrar Plano de Aula Pronto BNCC 2026?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Você encontra os melhores Planos de Aula Prontos BNCC 2026 aqui no Materiais Pedagógicos BNCC. Oferecemos pacotes completos e editáveis em Word e PDF para Educação Infantil, Ensino Fundamental e Médio."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "O Plano de Aula Pronto BNCC 2026 é editável?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Sim! Todos os nossos planos de aula são 100% editáveis em Word (DOCX). Você pode adaptar as atividades, avaliações e slides para a realidade da sua escola e turma."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "Como baixar o material após a compra?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Após a confirmação do pagamento, você recebe os links para download imediato em seu e-mail. O acesso é vitalício e você pode imprimir quando quiser."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "Os materiais servem para quais anos escolares?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Temos materiais para Berçário, Maternal, Pré-Escola, Fundamental 1 (1º ao 5º ano), Fundamental 2 (6º ao 9º ano) e Ensino Médio completo, além de Educação Especial e EJA."
-        }
-      }
-    ]
-  }
-  </script>
-
-  <!-- Organization and WebSite Schema -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "WebSite",
-        "@id": "https://planodeaulapronto.github.io/#website",
-        "url": "https://planodeaulapronto.github.io/",
-        "name": "Materiais Pedagógicos BNCC 2026",
-        "description": "Planos de aula, atividades e avaliações alinhadas à BNCC",
-        "potentialAction": [{
-          "@type": "SearchAction",
-          "target": {
-            "@type": "EntryPoint",
-            "urlTemplate": "https://planodeaulapronto.github.io/?search={search_term_string}"
-          },
-          "query-input": "required name=search_term_string"
-        }],
-        "inLanguage": "pt-BR"
-      },
-      {
-        "@type": "Organization",
-        "@id": "https://planodeaulapronto.github.io/#organization",
-        "name": "Diário da Educação",
-        "url": "https://planodeaulapronto.github.io/",
-        "logo": {
-          "@type": "ImageObject",
-          "url": "${products[0] ? `https://planodeaulapronto.github.io/${products[0].localImage || 'images/' + products[0].slug + '.webp'}` : ''}"
-        },
-        "description": "Plataforma líder em materiais pedagógicos voltados para professores e instituições de ensino no Brasil, 100% alinhados à BNCC."
-      }
-    ]
-  }
-  </script>
-
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --primary: #6C63FF;
-      --primary-dark: #5A52E0;
-      --secondary: #FF6B9D;
-      --accent: #00D4AA;
-      --dark: #1a1a2e;
-      --darker: #0f0f23;
-      --card-bg: #ffffff;
-      --text: #2d3748;
-      --text-light: #718096;
-      --radius: 16px;
-      --shadow: 0 4px 20px rgba(0,0,0,0.08);
-      --shadow-hover: 0 12px 40px rgba(0,0,0,0.15);
-    }
-
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    
-    body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      color: var(--text);
-      background: #f8fafc;
-      line-height: 1.6;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    /* ===== HERO SECTION ===== */
-    .hero {
-      background: linear-gradient(135deg, var(--darker) 0%, #16213e 50%, #1a1a2e 100%);
-      padding: 80px 20px 60px;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-    }
-    .hero::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: radial-gradient(ellipse at center, rgba(108,99,255,0.15) 0%, transparent 60%),
-                  radial-gradient(ellipse at 80% 30%, rgba(255,107,157,0.1) 0%, transparent 50%),
-                  radial-gradient(ellipse at 20% 70%, rgba(0,212,170,0.1) 0%, transparent 50%);
-      animation: heroGlow 8s ease-in-out infinite alternate;
-    }
-    @keyframes heroGlow {
-      0% { transform: scale(1) rotate(0deg); }
-      100% { transform: scale(1.1) rotate(3deg); }
-    }
-    .hero-content { position: relative; z-index: 2; max-width: 900px; margin: 0 auto; }
-    .hero-badge {
-      display: inline-block;
-      background: linear-gradient(135deg, var(--primary), var(--secondary));
-      color: white;
-      padding: 8px 24px;
-      border-radius: 30px;
-      font-size: 0.85rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-bottom: 24px;
-      animation: fadeInUp 0.6s ease-out;
-    }
-    .hero h1 {
-      font-family: 'Outfit', sans-serif;
-      font-size: clamp(2rem, 5vw, 3.5rem);
-      font-weight: 800;
-      color: white;
-      line-height: 1.15;
-      margin-bottom: 20px;
-      animation: fadeInUp 0.6s ease-out 0.1s both;
-    }
-    .hero h1 span { background: linear-gradient(135deg, #6C63FF, #FF6B9D, #00D4AA); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-    .hero p {
-      color: rgba(255,255,255,0.7);
-      font-size: 1.15rem;
-      max-width: 650px;
-      margin: 0 auto 32px;
-      animation: fadeInUp 0.6s ease-out 0.2s both;
-    }
-    .hero-stats {
-      display: flex;
-      justify-content: center;
-      gap: 40px;
-      flex-wrap: wrap;
-      animation: fadeInUp 0.6s ease-out 0.3s both;
-    }
-    .stat { text-align: center; }
-    .stat-number { font-family: 'Outfit', sans-serif; font-size: 2.5rem; font-weight: 800; color: var(--accent); }
-    .stat-label { color: rgba(255,255,255,0.6); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; }
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* ===== NAVIGATION ===== */
-    .cat-nav {
-      background: white;
-      padding: 20px;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      box-shadow: 0 2px 20px rgba(0,0,0,0.06);
-      border-bottom: 1px solid #edf2f7;
-    }
-    .cat-nav-inner {
-      max-width: 1400px;
-      margin: 0 auto;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 15px;
-      padding: 10px 4px;
-    }
-    .cat-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      padding: 12px 24px;
-      border-radius: 50px;
-      color: white;
-      text-decoration: none;
-      font-size: 0.95rem;
-      font-weight: 700;
-      white-space: nowrap;
-      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-      border: 2px solid rgba(255,255,255,0.1);
-    }
-    .cat-btn:hover { 
-      transform: translateY(-5px) scale(1.05); 
-      box-shadow: 0 12px 25px rgba(0,0,0,0.2);
-      border-color: rgba(255,255,255,0.4);
-    }
-    .cat-icon { font-size: 1.4rem; }
-    .cat-count {
-      background: rgba(255,255,255,0.25);
-      padding: 4px 12px;
-      border-radius: 20px;
-      font-size: 0.8rem;
-      font-weight: 800;
-      backdrop-filter: blur(4px);
-    }
-
-    /* ===== CATEGORY SECTIONS ===== */
-    .category-section {
-      max-width: 1400px;
-      margin: 40px auto;
-      padding: 0 20px;
-    }
-    .category-header {
-      padding: 24px 32px;
-      border-radius: var(--radius) var(--radius) 0 0;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .category-header h2 {
-      font-family: 'Outfit', sans-serif;
-      font-size: 1.6rem;
-      font-weight: 700;
-      color: white;
-    }
-    .section-count {
-      background: rgba(255,255,255,0.25);
-      color: white;
-      padding: 6px 16px;
-      border-radius: 20px;
-      font-size: 0.85rem;
-      font-weight: 600;
-    }
-
-    /* ===== PRODUCT GRID ===== */
-    .products-grid {
-      display: grid;
-      grid-template-columns: repeat(6, 1fr);
-      gap: 15px;
-      padding: 20px;
-      background: #f1f5f9;
-      border-radius: 0 0 var(--radius) var(--radius);
-    }
-
-    /* ===== PRODUCT CARD ===== */
-    .product-card {
-      background: var(--card-bg);
-      border-radius: var(--radius);
-      overflow: hidden;
-      box-shadow: var(--shadow);
-      transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-      display: flex;
-      flex-direction: column;
-    }
-    .product-card:hover {
-      transform: translateY(-6px);
-      box-shadow: var(--shadow-hover);
-    }
-    .card-image {
-      position: relative;
-      width: 100%;
-      aspect-ratio: 4/3;
-      overflow: hidden;
-      background: #f7fafc;
-    }
-    .card-image img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform 0.4s ease;
-    }
-    .product-card:hover .card-image img { transform: scale(1.05); }
-    .discount-badge {
-      position: absolute;
-      top: 12px;
-      right: 12px;
-      background: linear-gradient(135deg, #ef4444, #dc2626);
-      color: white;
-      padding: 4px 12px;
-      border-radius: 20px;
-      font-size: 0.8rem;
-      font-weight: 700;
-      box-shadow: 0 2px 8px rgba(239,68,68,0.4);
-    }
-    .card-body {
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      flex: 1;
-    }
-    .card-title {
-      font-family: 'Outfit', sans-serif;
-      font-size: 1rem;
-      font-weight: 700;
-      color: var(--dark);
-      line-height: 1.3;
-      margin-bottom: 8px;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-    }
-    .card-desc {
-      font-size: 0.85rem;
-      color: var(--text-light);
-      line-height: 1.5;
-      margin-bottom: 16px;
-      display: -webkit-box;
-      -webkit-line-clamp: 3;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-      flex: 1;
-    }
-    .card-footer {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      padding-top: 16px;
-      border-top: 1px solid #edf2f7;
-    }
-    .card-price {
-      font-family: 'Outfit', sans-serif;
-      font-size: 1.2rem;
-      font-weight: 700;
-      color: #16a34a;
-    }
-    .buy-btn {
-      display: inline-flex;
-      align-items: center;
-      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-      color: white;
-      padding: 10px 20px;
-      border-radius: 30px;
-      text-decoration: none;
-      font-size: 0.85rem;
-      font-weight: 600;
-      transition: all 0.3s ease;
-      white-space: nowrap;
-    }
-    .buy-btn:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 4px 15px rgba(108,99,255,0.4);
-    }
-
-    /* ===== SEARCH ===== */
-    .search-container {
-      max-width: 600px;
-      margin: 0 auto 0;
-      padding: 0 20px;
-      animation: fadeInUp 0.6s ease-out 0.4s both;
-    }
-    .search-box {
-      position: relative;
-    }
-    .search-box input {
-      width: 100%;
-      padding: 16px 24px 16px 50px;
-      border: 2px solid rgba(255,255,255,0.15);
-      border-radius: 50px;
-      font-size: 1rem;
-      background: rgba(255,255,255,0.1);
-      color: white;
-      backdrop-filter: blur(10px);
-      outline: none;
-      transition: all 0.3s ease;
-      font-family: 'Inter', sans-serif;
-    }
-    .search-box input::placeholder { color: rgba(255,255,255,0.5); }
-    .search-box input:focus { border-color: var(--primary); background: rgba(255,255,255,0.15); }
-    .search-icon {
-      position: absolute;
-      left: 20px;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 1.2rem;
-      opacity: 0.5;
-    }
-
-    /* ===== BACK TO TOP ===== */
-    .back-to-top {
-      position: fixed;
-      bottom: 30px;
-      right: 30px;
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--primary), var(--secondary));
-      color: white;
-      border: none;
-      font-size: 1.5rem;
-      cursor: pointer;
-      box-shadow: 0 4px 20px rgba(108,99,255,0.4);
-      transition: all 0.3s ease;
-      opacity: 0;
-      visibility: hidden;
-      z-index: 200;
-    }
-    .back-to-top.visible { opacity: 1; visibility: visible; }
-    .back-to-top:hover { transform: translateY(-3px); box-shadow: 0 8px 30px rgba(108,99,255,0.5); }
-
-    /* ===== FOOTER ===== */
-    .footer {
-      background: var(--darker);
-      color: rgba(255,255,255,0.5);
-      text-align: center;
-      padding: 40px 20px;
-      margin-top: 60px;
-    }
-    .footer p { font-size: 0.9rem; }
-    .footer a { color: var(--accent); text-decoration: none; }
-
-    /* ===== RESPONSIVE ===== */
-    @media (max-width: 1024px) {
-      .products-grid { 
-        grid-template-columns: repeat(3, 1fr); 
-      }
-    }
-    @media (max-width: 480px) {
-      .products-grid { 
-        grid-template-columns: repeat(2, 1fr) !important; 
-      }
-    }
-    @media (max-width: 768px) {
-      .hero { padding: 60px 16px 40px; }
-      .hero-stats { gap: 24px; }
-      .stat-number { font-size: 2rem; }
-      .products-grid { 
-        grid-template-columns: repeat(2, 1fr); 
-        gap: 12px; 
-        padding: 12px; 
-      }
-      .category-header { padding: 18px 20px; }
-      .category-header h2 { font-size: 1.2rem; }
-      .card-footer { flex-direction: column; align-items: stretch; }
-      .buy-btn { justify-content: center; }
-    }
-    @media (max-width: 480px) {
-      .products-grid { grid-template-columns: repeat(2, 1fr); }
-    }
-
-    /* ===== NO RESULTS ===== */
-    .no-results {
-      text-align: center;
-      padding: 60px 20px;
-      color: var(--text-light);
-      display: none;
-    }
-    .no-results.show { display: block; }
-    .no-results h3 { font-size: 1.3rem; margin-bottom: 8px; color: var(--text); }
-  </style>
-</head>
-<body>
-
-  <!-- HERO -->
-  <header class="hero">
-    <div class="hero-content">
-      <div class="hero-badge">📚 Materiais Atualizados 2026</div>
-      <h1>Plano de Aula Pronto <span>BNCC 2026</span></h1>
-      <p>Baixe plano de aula diário, semanal, bimestral e anual, editável em Word e PDF para imprimir. Materiais 100% de acordo com a BNCC para todos os anos.</p>
-      <div class="hero-stats">
-        <div class="stat">
-          <div class="stat-number">${products.length}</div>
-          <div class="stat-label">Produtos</div>
-        </div>
-        <div class="stat">
-          <div class="stat-number">${catOrder.filter(c => categories[c] && categories[c].length > 0).length}</div>
-          <div class="stat-label">Categorias</div>
-        </div>
-        <div class="stat">
-          <div class="stat-number">BNCC</div>
-          <div class="stat-label">Alinhados</div>
-        </div>
-      </div>
-      <br>
-      <div class="search-container">
-        <div class="search-box">
-          <span class="search-icon">🔍</span>
-          <input type="text" id="searchInput" placeholder="Buscar produtos..." autocomplete="off">
-        </div>
-      </div>
-    </div>
-  </header>
-
-  <!-- CATEGORY NAV -->
-  <nav class="cat-nav">
-    <div class="cat-nav-inner">
-      ${generateCatNav()}
-    </div>
-  </nav>
-
-  <!-- PRODUCT SECTIONS -->
-  <main id="productsMain">
-    ${generateSections()}
-  </main>
-
-  <!-- NO RESULTS -->
-  <div class="no-results" id="noResults">
-    <h3>😕 Nenhum produto encontrado</h3>
-    <p>Tente buscar por outro termo</p>
-  </div>
-
-  <!-- BACK TO TOP -->
-  <button class="back-to-top" id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
-
-  <!-- FOOTER -->
-  <footer class="footer">
-    <p>© 2026 — Materiais Pedagógicos BNCC — Todos os direitos reservados</p>
-  </footer>
-
-  <script>
-    // Back to top button
-    window.addEventListener('scroll', () => {
-      document.getElementById('backToTop').classList.toggle('visible', window.scrollY > 400);
-    });
-
-    // --- GLOBAL SEARCH LOGIC ---
-    let searchIndex = [];
-    
-    // Fetch indexes
-    async function loadIndexes() {
-      try {
-        const prodRes = await fetch('search-index-products.json');
-        const prodData = await prodRes.json();
-        searchIndex = [...prodData];
-        
-        const artRes = await fetch('search-index-articles.json');
-        if (artRes.ok) {
-          const artData = await artRes.json();
-          searchIndex = [...searchIndex, ...artData];
-        }
-      } catch (e) { console.error('Index load failed', e); }
-    }
-    loadIndexes();
-
-    const searchInput = document.getElementById('searchInput');
-    const sections = document.querySelectorAll('.category-section');
-    const noResults = document.getElementById('noResults');
-    const productsMain = document.getElementById('productsMain');
-    const catNav = document.querySelector('.cat-nav');
-    
-    // Create results overlay container
-    const resultsOverlay = document.createElement('div');
-    resultsOverlay.id = 'searchOverlay';
-    resultsOverlay.style.cssText = 'display: none; position: absolute; top: 100%; left: 0; right: 0; background: white; border-radius: 12px; box-shadow: 0 15px 50px rgba(0,0,0,0.25); z-index: 1000; max-height: 450px; overflow-y: auto; padding: 5px; margin-top: 15px; color: #333; border: 1px solid rgba(0,0,0,0.05); scrollbar-width: thin;';
-    searchInput.parentElement.appendChild(resultsOverlay);
-
-    searchInput.addEventListener('input', (e) => {
-      const query = e.target.value.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-      
-      if (!query) {
-        resultsOverlay.style.display = 'none';
-        productsMain.style.display = 'block';
-        catNav.style.display = 'block';
-        sections.forEach(s => s.style.display = '');
-        return;
-      }
-
-      // Hide standard sections when searching
-      productsMain.style.display = 'none';
-      catNav.style.display = 'none';
-
-      const matches = searchIndex.filter(item => 
-        item.title.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').includes(query)
-      )
-      .sort((a, b) => {
-        if (a.type === 'product' && b.type !== 'product') return -1;
-        if (a.type !== 'product' && b.type === 'product') return 1;
-        return 0;
-      })
-      .slice(0, 15);
-
-      if (matches.length > 0) {
-        resultsOverlay.style.display = 'block';
-        resultsOverlay.innerHTML = matches.map(item => {
-            let priceTag = item.price ? '<span style="font-weight: 800; color: #16a34a; font-size: 0.85rem">R$ ' + item.price + '</span>' : '';
-            return '<a href="' + item.url + '" rel="dofollow" style="display: flex; align-items: center; gap: 10px; padding: 12px; text-decoration: none; border-bottom: 1px solid #f1f5f9; transition: background 0.2s;">' +
-                   '<span style="font-size: 1.2rem">' + (item.type === 'article' ? '📰' : '📦') + '</span>' +
-                   '<div style="flex: 1">' +
-                   '  <div style="font-weight: 700; color: #1a1a2e; font-size: 0.9rem">' + item.title + '</div>' +
-                   '  <div style="font-size: 0.75rem; color: #64748b">' + (item.category || item.type) + '</div>' +
-                   '</div>' +
-                   priceTag +
-                   '</a>';
-        }).join('') + '<div style="text-align: center; padding: 10px; font-size: 0.8rem; color: #94a3b8">Mostrando ' + matches.length + ' resultados</div>';
-      } else {
-        resultsOverlay.style.display = 'block';
-        resultsOverlay.innerHTML = '<div style="padding: 20px; text-align: center; color: #64748b">Nenhum resultado encontrado</div>';
-      }
-    });
-
-    // Close overlay on click outside
-    document.addEventListener('click', (e) => {
-      if (!searchInput.contains(e.target) && !resultsOverlay.contains(e.target)) {
-        resultsOverlay.style.display = 'none';
-      }
-    });
-
-    // Smooth scroll for nav buttons
-    document.querySelectorAll('.cat-btn').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        if (btn.getAttribute('href').startsWith('http')) return;
-        const targetId = btn.getAttribute('href');
-        if (!targetId.startsWith('#')) return;
-        e.preventDefault();
-        const target = document.querySelector(targetId);
-        if (target) {
-          const navHeight = document.querySelector('.cat-nav').offsetHeight;
-          window.scrollTo({ top: target.offsetTop - navHeight - 10, behavior: 'smooth' });
-        }
-      });
-    });
-  </script>
-</body>
-</html>`;
+// Construct the HTML using string concatenation to avoid syntax errors with nested backticks
+let html = '<!DOCTYPE html>\n<html lang="pt-BR">\n<head>\n' +
+  '  <meta charset="UTF-8">\n' +
+  '  <meta name="viewport" content="width=device-width, initial-scale=1.0">\n' +
+  '  <title>Plano de Aula Pronto BNCC 2026 - Baixar em Word e PDF Editável</title>\n' +
+  '  <meta name="description" content="Plano de Aula Pronto BNCC 2026. Baixe plano de aula diário, semanal, bimestral e anual, editável em Word e PDF para imprimir. Materiais completos de acordo com a BNCC para todos os anos.">\n' +
+  '  <meta name="robots" content="index, follow">\n' +
+  '  <link rel="canonical" href="https://planodeaulapronto.github.io/">\n' +
+  '  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Outfit:wght@700;800&display=swap" rel="stylesheet">\n' +
+  '  <style>\n' +
+  '    :root {\n' +
+  '      --primary: #6C63FF; --primary-dark: #5A52E0; --secondary: #FF6B9D; --accent: #00D4AA;\n' +
+  '      --dark: #1a1a2e; --darker: #0f0f23; --card-bg: #ffffff; --text: #2d3748; --text-light: #718096;\n' +
+  '      --radius: 16px; --shadow: 0 4px 20px rgba(0,0,0,0.08); --shadow-hover: 0 12px 40px rgba(0,0,0,0.15);\n' +
+  '    }\n' +
+  '    * { margin: 0; padding: 0; box-sizing: border-box; }\n' +
+  '    body { font-family: \'Inter\', sans-serif; color: var(--text); background: #f8fafc; line-height: 1.6; overflow-x: hidden; }\n' +
+  '    .hero { background: linear-gradient(135deg, var(--darker) 0%, #16213e 50%, #1a1a2e 100%); padding: 80px 20px 60px; text-align: center; position: relative; }\n' +
+  '    .hero h1 { font-family: \'Outfit\', sans-serif; font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 800; color: white; margin-bottom: 20px; }\n' +
+  '    .hero h1 span { background: linear-gradient(135deg, #6C63FF, #FF6B9D, #00D4AA); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }\n' +
+  '    .hero p { color: rgba(255,255,255,0.7); font-size: 1.15rem; max-width: 650px; margin: 0 auto 32px; }\n' +
+  '    .hero-stats { display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; }\n' +
+  '    .stat-number { font-family: \'Outfit\', sans-serif; font-size: 2.5rem; font-weight: 800; color: var(--accent); }\n' +
+  '    .stat-label { color: rgba(255,255,255,0.6); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; }\n' +
+  '    .cat-nav { background: white; padding: 20px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 20px rgba(0,0,0,0.06); border-bottom: 1px solid #edf2f7; }\n' +
+  '    .cat-nav-inner { max-width: 1400px; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; }\n' +
+  '    .cat-btn { display: inline-flex; align-items: center; gap: 10px; padding: 12px 24px; border-radius: 50px; color: white; text-decoration: none; font-size: 0.95rem; font-weight: 700; transition: all 0.3s; }\n' +
+  '    .cat-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.15); }\n' +
+  '    .category-section { max-width: 1400px; margin: 40px auto; padding: 0 20px; }\n' +
+  '    .category-header { padding: 24px 32px; border-radius: var(--radius) var(--radius) 0 0; display: flex; align-items: center; justify-content: space-between; }\n' +
+  '    .category-header h2 { font-family: \'Outfit\', sans-serif; font-size: 1.6rem; color: white; }\n' +
+  '    .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; padding: 20px; background: #f1f5f9; border-radius: 0 0 var(--radius) var(--radius); }\n' +
+  '    @media (min-width: 1200px) { .products-grid { grid-template-columns: repeat(6, 1fr); } }\n' +
+  '    .product-card { background: white; border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); transition: all 0.3s; display: flex; flex-direction: column; }\n' +
+  '    .card-image { position: relative; width: 100%; aspect-ratio: 4/3; }\n' +
+  '    .card-image img { width: 100%; height: 100%; object-fit: cover; }\n' +
+  '    .card-body { padding: 15px; flex: 1; display: flex; flex-direction: column; }\n' +
+  '    .card-title { font-family: \'Outfit\', sans-serif; font-size: 0.95rem; font-weight: 700; color: var(--dark); }\n' +
+  '    .card-price { font-weight: 800; color: #16a34a; font-size: 1.1rem; }\n' +
+  '    .buy-btn { background: var(--primary); color: white; padding: 8px 16px; border-radius: 20px; text-decoration: none; font-size: 0.8rem; font-weight: 700; }\n' +
+  '    .search-container { max-width: 600px; margin: 30px auto 0; position: relative; z-index: 1001; }\n' +
+  '    .search-box { position: relative; }\n' +
+  '    .search-box input { width: 100%; padding: 16px 20px 16px 50px; border-radius: 50px; border: 2px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.1); color: white; font-size: 1rem; outline: none; transition: all 0.3s; }\n' +
+  '    .search-box input:focus { background: white; color: var(--dark); border-color: var(--primary); }\n' +
+  '    #searchOverlay { position: absolute; top: calc(100% + 10px); left: 0; right: 0; background: white; border-radius: 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); z-index: 2000; max-height: 500px; overflow-y: auto; display: none; padding: 10px; border: 1px solid #eee; }\n' +
+  '    .search-backdrop { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); z-index: 1000; display: none; }\n' +
+  '    .footer { background: var(--darker); color: white; padding: 40px 20px; text-align: center; margin-top: 60px; }\n' +
+  '  </style>\n</head>\n<body>\n' +
+  '  <div class="search-backdrop" id="searchBackdrop"></div>\n' +
+  '  <header class="hero">\n    <div class="hero-content">\n' +
+  '      <h1>Plano de Aula Pronto <span>BNCC 2026</span></h1>\n' +
+  '      <p>Baixe plano de aula diário, semanal, bimestral e anual, editável em Word e PDF. Materiais 100% de acordo com a BNCC.</p>\n' +
+  '      <div class="hero-stats">\n' +
+  '        <div class="stat"><div class="stat-number">' + products.length + '</div><div class="stat-label">Materiais</div></div>\n' +
+  '        <div class="stat"><div class="stat-number">EDITÁVEL</div><div class="stat-label">Word/PDF</div></div>\n' +
+  '        <div class="stat"><div class="stat-number">BNCC</div><div class="stat-label">Alinhados</div></div>\n' +
+  '      </div>\n' +
+  '      <div class="search-container">\n' +
+  '        <div class="search-box">\n' +
+  '          <input type="text" id="searchInput" placeholder="O que você está procurando? (ex: berçário, 1º ano...)" autocomplete="off">\n' +
+  '          <div id="searchOverlay"></div>\n' +
+  '        </div>\n' +
+  '      </div>\n' +
+  '    </div>\n  </header>\n' +
+  '  <nav class="cat-nav">\n    <div class="cat-nav-inner">' + generateCatNav() + '</div>\n  </nav>\n' +
+  '  <main id="productsMain">' + generateSections() + '</main>\n' +
+  '  <footer class="footer"><p>© 2026 — Materiais Pedagógicos BNCC</p></footer>\n' +
+  '  <script>\n' +
+  '    let searchIndex = [];\n' +
+  '    async function loadAJAXIndex() {\n' +
+  '      try {\n' +
+  '        const [p, a] = await Promise.all([\n' +
+  '          fetch(\'search-index-products.json\').then(r => r.json()),\n' +
+  '          fetch(\'search-index-articles.json\').then(r => r.ok ? r.json() : [])\n' +
+  '        ]);\n' +
+  '        searchIndex = [...p, ...a];\n' +
+  '      } catch(e) { console.error(\'AJAX failed\', e); }\n' +
+  '    }\n' +
+  '    loadAJAXIndex();\n' +
+  '\n' +
+  '    function stripHtmlClient(h) {\n' +
+  '      if(!h) return ""; \n' +
+  '      const d = new DOMParser().parseFromString(h, "text/html");\n' +
+  '      return d.body.textContent || "";\n' +
+  '    }\n' +
+  '\n' +
+  '    const sInput = document.getElementById("searchInput");\n' +
+  '    const sOverlay = document.getElementById("searchOverlay");\n' +
+  '    const sBackdrop = document.getElementById("searchBackdrop");\n' +
+  '\n' +
+  '    sInput.addEventListener("input", (e) => {\n' +
+  '      const q = e.target.value.toLowerCase().normalize("NFD").replace(/[\\u0300-\\u036f]/g, "").trim();\n' +
+  '      if(q.length < 1) {\n' +
+  '        sOverlay.style.display = "none";\n' +
+  '        sBackdrop.style.display = "none";\n' +
+  '        return;\n' +
+  '      }\n' +
+  '      if(q.length < 2) return;\n' +
+  '\n' +
+  '      const matches = searchIndex.filter(item => {\n' +
+  '        const cleanTitle = stripHtmlClient(item.title).toLowerCase().normalize("NFD").replace(/[\\u0300-\\u036f]/g, "");\n' +
+  '        return cleanTitle.includes(q);\n' +
+  '      }).slice(0, 15);\n' +
+  '\n' +
+  '      sOverlay.style.display = "block";\n' +
+  '      sBackdrop.style.display = "block";\n' +
+  '\n' +
+  '      if(matches.length > 0) {\n' +
+  '        sOverlay.innerHTML = matches.map(item => {\n' +
+  '          const icon = item.type === "article" ? "📰" : "📦";\n' +
+  '          const price = item.price ? `<span style="color: #16a34a; font-weight: 800">R$ ${item.price}</span>` : "";\n' +
+  '          return `<a href="${item.url}" style="display: flex; align-items: center; gap: 10px; padding: 12px; text-decoration: none; border-bottom: 1px solid #f1f5f9; border-radius: 8px;">\n' +
+  '            <span style="font-size: 1.2rem">${icon}</span>\n' +
+  '            <div style="flex: 1">\n' +
+  '              <div style="font-weight: 700; color: #1a1a2e; font-size: 0.9rem">${item.title}</div>\n' +
+  '              <div style="font-size: 0.75rem; color: #64748b">${item.category || item.type}</div>\n' +
+  '            </div>\n' +
+  '            ${price}\n' +
+  '          </a>`;\n' +
+  '        }).join("") + `<div style="text-align: center; padding: 8px; font-size: 0.75rem; color: #94a3b8">Resultados: ${matches.length}</div>`;\n' +
+  '      } else {\n' +
+  '        sOverlay.innerHTML = \'<div style="padding: 20px; text-align: center; color: #64748b">Nenhum resultado encontrado</div>\';\n' +
+  '      }\n' +
+  '    });\n' +
+  '\n' +
+  '    document.addEventListener("click", (e) => {\n' +
+  '      if(!sInput.contains(e.target) && !sOverlay.contains(e.target)) {\n' +
+  '        sOverlay.style.display = "none";\n' +
+  '        sBackdrop.style.display = "none";\n' +
+  '      }\n' +
+  '    });\n' +
+  '  </script>\n</body>\n</html>';
 
 fs.writeFileSync(path.join(__dirname, 'index.html'), html);
-console.log('\nLanding page generated: index.html');
-console.log(`Total size: ${(Buffer.byteLength(html) / 1024).toFixed(0)} KB`);
+console.log('Landing page generated: index.html');
 
-// Export search index for items
-const searchIndex = products.map(p => ({
-  title: p.title,
+// Export search index for products
+const searchIndexProducts = products.map(p => ({
+  title: stripHtml(p.title),
   slug: p.slug,
   type: 'product',
   category: categorize(p.slug),
   price: p.price,
   url: `produto/${p.slug}.html`
 }));
-fs.writeFileSync(path.join(__dirname, 'search-index-products.json'), JSON.stringify(searchIndex));
+fs.writeFileSync(path.join(__dirname, 'search-index-products.json'), JSON.stringify(searchIndexProducts));

@@ -4,6 +4,7 @@
 !products.json
 !search-index-*.json
 !robots.txt
+!sitemap.txt
 node_modules/
 openai*.js
 nul

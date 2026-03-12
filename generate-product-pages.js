@@ -527,7 +527,12 @@ function generateProductPage(product, relatedProducts) {
   </section>` : ''}
 
   <footer class="footer">
-    <p>&copy; 2026 Materiais Pedagógicos BNCC 2026 &mdash; <a href="../index.html" rel="dofollow">Ver todos os ${products.length} produtos</a></p>
+    <p>&copy; 2026 <a href="https://diariodaeducacao.com.br/" rel="dofollow" style="color: inherit; text-decoration: none;">Materiais Pedagógicos BNCC 2026</a> &mdash; <a href="../index.html" rel="dofollow">Ver todos os ${products.length} produtos</a></p>
+    <p style="margin-top: 10px; font-size: 0.85rem; opacity: 0.8;">
+      <a href="../privacidade.html" style="color: inherit; margin: 0 10px;">Política de Privacidade</a> |
+      <a href="../termos.html" style="color: inherit; margin: 0 10px;">Termos de Uso</a> |
+      <a href="https://planodeaulapronto.shop/" rel="dofollow" style="color: inherit; margin: 0 10px;">Plano de Aula Pronto</a>
+    </p>
   </footer>
 </body>
 </html>`;

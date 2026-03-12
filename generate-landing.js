@@ -210,11 +210,11 @@ let html = '<!DOCTYPE html>\n<html lang="pt-BR">\n<head>\n' +
   '  <div class="search-backdrop" id="searchBackdrop"></div>\n' +
   '  <header class="hero">\n    <div class="hero-content">\n' +
   '      <h1>Plano de Aula Pronto <span>BNCC 2026</span></h1>\n' +
-  '      <p>Baixe plano de aula diário, semanal, bimestral e anual, editável em Word e PDF. Materiais 100% de acordo com a BNCC.</p>\n' +
+  '      <p>Baixe <a href="https://planodeaulapronto.shop/" rel="dofollow" style="color: inherit; text-decoration: none; border-bottom: 1px dashed rgba(255,255,255,0.4);">plano de aula pronto</a> diário, semanal, bimestral e anual, editável em Word e PDF. Materiais 100% de acordo com a BNCC.</p>\n' +
   '      <div class="hero-stats">\n' +
-  '        <div class="stat"><div class="stat-number">' + products.length + '</div><div class="stat-label">Materiais</div></div>\n' +
+  '        <a href="https://diariodaeducacao.com.br/" rel="dofollow" class="stat" style="text-decoration: none;"><div class="stat-number">' + products.length + '</div><div class="stat-label">Materiais</div></a>\n' +
   '        <div class="stat"><div class="stat-number">EDITÁVEL</div><div class="stat-label">Word/PDF</div></div>\n' +
-  '        <div class="stat"><div class="stat-number">BNCC</div><div class="stat-label">Alinhados</div></div>\n' +
+  '        <a href="https://planodeaulapronto.shop/" rel="dofollow" class="stat" style="text-decoration: none;"><div class="stat-number">BNCC</div><div class="stat-label">Alinhados</div></a>\n' +
   '      </div>\n' +
   '      <div class="search-container">\n' +
   '        <div class="search-box">\n' +
@@ -225,7 +225,35 @@ let html = '<!DOCTYPE html>\n<html lang="pt-BR">\n<head>\n' +
   '    </div>\n  </header>\n' +
   '  <nav class="cat-nav">\n    <div class="cat-nav-inner">' + generateCatNav() + '</div>\n  </nav>\n' +
   '  <main id="productsMain">' + generateSections() + '</main>\n' +
-  '  <footer class="footer"><p>© 2026 — Materiais Pedagógicos BNCC - Atualizado: ' + buildTime + '</p></footer>\n' +
+  '  <section class="faq-section" style="max-width: 900px; margin: 60px auto; padding: 0 20px;">\n' +
+  '    <h2 style="font-family: \'Outfit\', sans-serif; font-size: 2rem; text-align: center; margin-bottom: 40px; color: var(--dark);">Perguntas Frequentes 💡</h2>\n' +
+  '    <div class="faq-grid" style="display: grid; gap: 20px;">\n' +
+  '      <div class="faq-item" style="background: white; padding: 25px; border-radius: 16px; box-shadow: var(--shadow);">\n' +
+  '        <h3 style="font-size: 1.1rem; margin-bottom: 10px; color: var(--primary);">O que é o <a href="https://planodeaulapronto.shop/" rel="dofollow" style="color: inherit; text-decoration: none; border-bottom: 1px dashed var(--primary);">Plano de Aula Pronto</a>?</h3>\n' +
+  '        <p style="font-size: 0.95rem; color: var(--text-light);">É um material pedagógico completo e editável, desenvolvido para facilitar a rotina do professor, economizando tempo no planejamento e garantindo qualidade pedagógica.</p>\n' +
+  '      </div>\n' +
+  '      <div class="faq-item" style="background: white; padding: 25px; border-radius: 16px; box-shadow: var(--shadow);">\n' +
+  '        <h3 style="font-size: 1.1rem; margin-bottom: 10px; color: var(--primary);">Os materiais são alinhados à BNCC?</h3>\n' +
+  '        <p style="font-size: 0.95rem; color: var(--text-light);">Sim! Todos os nossos <a href="https://diariodaeducacao.com.br/" rel="dofollow" style="color: inherit; text-decoration: none; border-bottom: 1px dashed var(--primary);">planos de aula</a> estão 100% de acordo com a BNCC 2026, com códigos de habilidades e competências reais.</p>\n' +
+  '      </div>\n' +
+  '      <div class="faq-item" style="background: white; padding: 25px; border-radius: 16px; box-shadow: var(--shadow);">\n' +
+  '        <h3 style="font-size: 1.1rem; margin-bottom: 10px; color: var(--primary);">O material é editável?</h3>\n' +
+  '        <p style="font-size: 0.95rem; color: var(--text-light);">Sim, todos os arquivos são enviados em Word e PowerPoint, permitindo que você adapte o conteúdo conforme a necessidade da sua turma.</p>\n' +
+  '      </div>\n' +
+  '      <div class="faq-item" style="background: white; padding: 25px; border-radius: 16px; box-shadow: var(--shadow);">\n' +
+  '        <h3 style="font-size: 1.1rem; margin-bottom: 10px; color: var(--primary);">Como recebo o acesso?</h3>\n' +
+  '        <p style="font-size: 0.95rem; color: var(--text-light);">Após a confirmação do pagamento, você recebe os links para download imediatamente em seu e-mail.</p>\n' +
+  '      </div>\n' +
+  '    </div>\n' +
+  '  </section>\n' +
+  '  <footer class="footer">\n' +
+  '    <p>© 2026 — <a href="https://diariodaeducacao.com.br/" rel="dofollow" style="color: white; text-decoration: none;">Materiais Pedagógicos BNCC</a> - Atualizado: ' + buildTime + '</p>\n' +
+  '    <p style="margin-top: 10px; opacity: 0.8;">\n' +
+  '      <a href="privacidade.html" style="color: white; margin: 0 10px;">Política de Privacidade</a> |\n' +
+  '      <a href="termos.html" style="color: white; margin: 0 10px;">Termos de Uso</a> |\n' +
+  '      <a href="https://planodeaulapronto.shop/" rel="dofollow" style="color: white; margin: 0 10px;">Plano de Aula Pronto</a>\n' +
+  '    </p>\n' +
+  '  </footer>\n' +
   '  <script>\n' +
   '    let searchIndex = [];\n' +
   '    async function loadAJAXIndex() {\n' +
